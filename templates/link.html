@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letters & Communications - AUST Admin Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #004080;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+    
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      min-height: 100vh;
+      width: 250px;
+      transition: all 0.3s;
+      position: fixed;
+      z-index: 1000;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    
+    .sidebar-header img {
+      max-height: 50px;
+      border-radius: 5px;
+    }
+    
+    .sidebar ul.components {
+      padding: 20px 0;
+    }
+    
+    .sidebar ul li a {
+      padding: 10px 20px;
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .sidebar ul li a:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar ul li.active a {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: all 0.3s;
+      flex: 1;
+      width: calc(100% - 250px);
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      height: 100%;
+    }
+    
+    .card:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        margin-left: -250px;
+      }
+      .sidebar.active {
+        margin-left: 0;
+      }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+      .main-content.active {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+      }
+    }
+    
+    .letter-template {
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .letter-template:hover {
+      background-color: #f8f9fa;
+      border-color: var(--primary-color);
+    }
+    
+    .letter-template.active {
+      border-color: var(--primary-color);
+      background-color: #e7f1ff;
+    }
+    
+    .letter-preview {
+      min-height: 400px;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 20px;
+      background-color: white;
+    }
+    
+    .ai-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.7em;
+      margin-left: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="https://www.rsif-paset.org/wp-content/uploads/2020/10/11-abuja.jpg" alt="AUST Logo">
+        <h5 class="mt-2 text-white">AUST Admin Portal</h5>
+        <small class="text-light">AI-Powered System</small>
+      </div>
+      
+      <ul class="list-unstyled components">
+        <li>
+          <a href="/admin-dashboard"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        </li>
+        <li class="active">
+          <a href="#"><i class="fas fa-envelope me-2"></i> Letters & Communications</a>
+        </li>
+        <li>
+          <a href="/admin-dashboard#applications"><i class="fas fa-file-alt me-2"></i> Applications</a>
+        </li>
+        <li>
+          <a href="/admin-dashboard#students"><i class="fas fa-users me-2"></i> Students</a>
+        </li>
+        <li>
+          <a href="/admin-dashboard#ai"><i class="fas fa-robot me-2"></i> AI Settings</a>
+        </li>
+        <li class="mt-4">
+          <a href="/api/logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+          <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <div class="ms-auto">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-1"></i> Admin User
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" href="/api/logout">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <div class="container-fluid">
+        <!-- Letters Section -->
+        <div id="letters-section" class="section active">
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="mb-4">Letters & Communications <span class="ai-badge">AI-Powered</span></h3>
+              <p class="text-muted">Manage and send communications to students with personalized templates</p>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="card-title mb-0"><i class="fas fa-file-alt me-2"></i> Letter Templates</h5>
+                </div>
+                <div class="card-body">
+                  <div class="list-group list-group-flush" id="letter-templates">
+                    <!-- Templates will be loaded here -->
+                  </div>
+                  <button class="btn btn-primary mt-3 w-100" onclick="showAddTemplateModal()">
+                    <i class="fas fa-plus me-1"></i> Add New Template
+                  </button>
+                </div>
+              </div>
+              
+              <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                  <h5 class="card-title mb-0"><i class="fas fa-users me-2"></i> Recipients</h5>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Select Recipients</label>
+                    <select class="form-select" id="recipient-type" onchange="updateRecipientOptions()">
+                      <option value="all">All Students</option>
+                      <option value="admitted">Admitted Students</option>
+                      <option value="pending">Pending Applications</option>
+                      <option value="faculty">By Faculty</option>
+                      <option value="program">By Program</option>
+                      <option value="individual">Individual Students</option>
+                    </select>
+                  </div>
+                  
+                  <div id="faculty-options" class="mb-3" style="display: none;">
+                    <label class="form-label">Select Faculty</label>
+                    <select class="form-select" id="faculty-select">
+                      <!-- Options will be populated dynamically -->
+                    </select>
+                  </div>
+                  
+                  <div id="program-options" class="mb-3" style="display: none;">
+                    <label class="form-label">Select Program</label>
+                    <select class="form-select" id="program-select">
+                      <!-- Options will be populated dynamically -->
+                    </select>
+                  </div>
+                  
+                  <div id="individual-options" class="mb-3" style="display: none;">
+                    <label class="form-label">Select Students</label>
+                    <select class="form-select" id="student-select" multiple>
+                      <!-- Options will be populated dynamically -->
+                    </select>
+                  </div>
+                  
+                  <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span id="recipient-count">0</span> recipients selected
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Actions -->
+              <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                  <h5 class="card-title mb-0"><i class="fas fa-bolt me-2"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                  <button class="btn btn-outline-primary w-100 mb-2" onclick="generateAdmissionLetters()">
+                    <i class="fas fa-graduation-cap me-2"></i> Generate Admission Letters
+                  </button>
+                  <button class="btn btn-outline-success w-100 mb-2" onclick="sendWelcomeEmails()">
+                    <i class="fas fa-envelope me-2"></i> Send Welcome Emails
+                  </button>
+                  <button class="btn btn-outline-info w-100" onclick="sendFeeReminders()">
+                    <i class="fas fa-money-bill me-2"></i> Send Fee Reminders
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-8">
+              <div class="card">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0"><i class="fas fa-edit me-2"></i> Letter Editor</h5>
+                  <div>
+                    <button class="btn btn-light me-2" onclick="previewLetter()">
+                      <i class="fas fa-eye me-1"></i> Preview
+                    </button>
+                    <button class="btn btn-warning me-2" onclick="sendLetters()">
+                      <i class="fas fa-paper-plane me-1"></i> Send Letters
+                    </button>
+                    <button class="btn btn-info" onclick="printLetters()">
+                      <i class="fas fa-print me-1"></i> Print Letters
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="mb-3">
+                    <label class="form-label">Letter Subject</label>
+                    <input type="text" class="form-control" id="letter-subject" placeholder="Enter letter subject">
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Letter Content</label>
+                    <textarea class="form-control" id="letter-content" rows="15" placeholder="Enter letter content"></textarea>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Available Placeholders</label>
+                    <div class="d-flex flex-wrap gap-2">
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{student_name}')">{student_name}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{application_id}')">{application_id}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{matric_number}')">{matric_number}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{program}')">{program}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{faculty}')">{faculty}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{jamb_score}')">{jamb_score}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{cgpa}')">{cgpa}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{current_date}')">{current_date}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{academic_session}')">{academic_session}</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="insertPlaceholder('{admission_status}')">{admission_status}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Preview Section -->
+              <div class="card mt-4" id="preview-section" style="display: none;">
+                <div class="card-header bg-secondary text-white">
+                  <h5 class="card-title mb-0"><i class="fas fa-eye me-2"></i> Letter Preview</h5>
+                </div>
+                <div class="card-body">
+                  <div id="letter-preview" class="letter-preview">
+                    <!-- Preview content will be inserted here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Template Modal -->
+  <div class="modal fade" id="addTemplateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Add New Template</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="templateForm">
+            <div class="mb-3">
+              <label class="form-label">Template Name</label>
+              <input type="text" class="form-control" id="template-name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Template Subject</label>
+              <input type="text" class="form-control" id="template-subject" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Template Content</label>
+              <textarea class="form-control" id="template-content" rows="10" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Available Placeholders</label>
+              <div class="d-flex flex-wrap gap-1">
+                <span class="badge bg-secondary">{student_name}</span>
+                <span class="badge bg-secondary">{application_id}</span>
+                <span class="badge bg-secondary">{matric_number}</span>
+                <span class="badge bg-secondary">{program}</span>
+                <span class="badge bg-secondary">{faculty}</span>
+                <span class="badge bg-secondary">{jamb_score}</span>
+                <span class="badge bg-secondary">{cgpa}</span>
+                <span class="badge bg-secondary">{current_date}</span>
+                <span class="badge bg-secondary">{academic_session}</span>
+                <span class="badge bg-secondary">{admission_status}</span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveTemplate()">Save Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Data storage
+    let letterTemplates = [];
+    let students = [];
+    let applications = [];
+    let faculties = [];
+    let programs = [];
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDataFromServer();
+      loadTemplates();
+      updateRecipientOptions();
+      
+      // Set up sidebar toggle
+      document.getElementById('sidebarCollapse').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('main-content').classList.toggle('active');
+      });
+
+      // Load default template
+      setTimeout(() => {
+        if (letterTemplates.length > 0) {
+          loadTemplate(letterTemplates[0].id);
+        }
+      }, 500);
+    });
+    
+    // Load data from server
+    async function loadDataFromServer() {
+      try {
+        // Fetch applications from server
+        const appsResponse = await fetch('/api/get_applications');
+        applications = await appsResponse.json();
+        
+        // Process data for templates
+        processApplicationData();
+        
+      } catch (error) {
+        console.error('Error loading data:', error);
+        // Fallback to sample data
+        createSampleData();
+      }
+      
+      // Populate dropdowns
+      populateFacultyOptions();
+      populateProgramOptions();
+      populateStudentOptions();
+    }
+    
+    // Process application data for templates
+    function processApplicationData() {
+      students = applications.map(app => ({
+        application_id: app.application_id,
+        fullName: app.fullname,
+        firstName: app.fullname?.split(' ')[0] || 'Student',
+        lastName: app.fullname?.split(' ').slice(1).join(' ') || '',
+        email: app.email,
+        program: app.program,
+        faculty: getFacultyFromProgram(app.program),
+        jambScore: app.jamb || 'Not specified',
+        cgpa: app.cgpa || 'Not specified',
+        status: app.status || 'pending',
+        phone: app.phone || 'Not provided'
+      }));
+      
+      // Extract unique faculties and programs
+      faculties = [...new Set(students.map(s => s.faculty))].filter(f => f);
+      programs = [...new Set(students.map(s => s.program))].filter(p => p);
+    }
+    
+    // Determine faculty based on program
+    function getFacultyFromProgram(program) {
+      if (!program) return 'General';
+      
+      const sciencePrograms = ['Computer Science', 'Software Engineering', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
+      const engineeringPrograms = ['Civil Engineering', 'Mechanical Engineering', 'Electrical Engineering', 'Petroleum Engineering'];
+      const managementPrograms = ['Business Administration', 'Accounting', 'Economics', 'Management'];
+      
+      if (sciencePrograms.some(p => program.includes(p))) return 'Faculty of Science';
+      if (engineeringPrograms.some(p => program.includes(p))) return 'Faculty of Engineering';
+      if (managementPrograms.some(p => program.includes(p))) return 'Faculty of Management Sciences';
+      
+      return 'Faculty of Science and Technology';
+    }
+    
+    // Create sample data if server data is not available
+    function createSampleData() {
+      students = [
+        {
+          application_id: 'APP2024001',
+          fullName: 'John Chukwuma Adebayo',
+          firstName: 'John',
+          lastName: 'Adebayo',
+          email: 'john.adebayo@example.com',
+          program: 'Computer Science',
+          faculty: 'Faculty of Science',
+          jambScore: '280',
+          cgpa: '4.2',
+          status: 'admitted',
+          phone: '+2348012345678'
+        },
+        {
+          application_id: 'APP2024002',
+          fullName: 'Jane Ifeoma Okoro',
+          firstName: 'Jane',
+          lastName: 'Okoro',
+          email: 'jane.okoro@example.com',
+          program: 'Software Engineering',
+          faculty: 'Faculty of Science',
+          jambScore: '265',
+          cgpa: '4.0',
+          status: 'admitted',
+          phone: '+2348023456789'
+        },
+        {
+          application_id: 'APP2024003',
+          fullName: 'Michael Oluwaseun Bello',
+          firstName: 'Michael',
+          lastName: 'Bello',
+          email: 'michael.bello@example.com',
+          program: 'Civil Engineering',
+          faculty: 'Faculty of Engineering',
+          jambScore: '240',
+          cgpa: '3.8',
+          status: 'pending',
+          phone: '+2348034567890'
+        }
+      ];
+      
+      faculties = ['Faculty of Science', 'Faculty of Engineering', 'Faculty of Management Sciences'];
+      programs = ['Computer Science', 'Software Engineering', 'Civil Engineering', 'Business Administration'];
+    }
+    
+    // Load letter templates
+    function loadTemplates() {
+      // Try to get templates from localStorage
+      const savedTemplates = localStorage.getItem('aust_letterTemplates');
+      
+      if (savedTemplates) {
+        letterTemplates = JSON.parse(savedTemplates);
+      } else {
+        // Create default templates
+        letterTemplates = [
+          {
+            id: 1,
+            name: 'Admission Offer Letter',
+            subject: 'Admission Offer - African University of Science and Technology',
+            content: `Dear {student_name},
+
+We are pleased to inform you that you have been offered provisional admission to study {program} at the African University of Science and Technology (AUST), Abuja for the {academic_session} academic session.
+
+Your application ID is {application_id}.
+
+ADMISSION DETAILS:
+- Program: {program}
+- Faculty: {faculty}
+- JAMB Score: {jamb_score}
+- Academic Session: {academic_session}
+
+This offer is based on our AI-powered admission evaluation which considered your academic qualifications and program suitability.
+
+Please log in to the student portal to accept this offer and complete your registration within two weeks.
+
+Congratulations and welcome to AUST Abuja!
+
+Regards,
+Admissions Office
+African University of Science and Technology, Abuja
+admissions@aust.edu.ng`
+          },
+          {
+            id: 2,
+            name: 'Fee Payment Reminder',
+            subject: 'Tuition Fee Payment Reminder - {academic_session} Academic Session',
+            content: `Dear {student_name},
+
+This is a reminder that your tuition fee payment for the {academic_session} academic session is due on {current_date}.
+
+Please ensure you complete your payment before the deadline to avoid any registration issues or penalties.
+
+Payment can be made through:
+1. Online payment portal
+2. Bank transfer
+3. Direct payment at the bursary
+
+If you have already made the payment, please disregard this reminder.
+
+For payment-related inquiries, contact the finance office.
+
+Regards,
+Finance Office
+African University of Science and Technology, Abuja`
+          },
+          {
+            id: 3,
+            name: 'Welcome Email',
+            subject: 'Welcome to AUST Abuja - Important Information',
+            content: `Dear {student_name},
+
+Welcome to the African University of Science and Technology, Abuja!
+
+We are excited to have you join our community of innovators and future leaders. Here are some important details:
+
+STUDENT INFORMATION:
+- Program: {program}
+- Faculty: {faculty}
+- Academic Session: {academic_session}
+
+NEXT STEPS:
+1. Complete your registration on the student portal
+2. Attend the orientation program
+3. Collect your student ID card
+4. Familiarize yourself with the academic calendar
+
+We look forward to supporting your academic journey and helping you achieve your goals.
+
+Best regards,
+Student Affairs Office
+African University of Science and Technology, Abuja`
+          }
+        ];
+        
+        // Save default templates
+        localStorage.setItem('aust_letterTemplates', JSON.stringify(letterTemplates));
+      }
+      
+      renderTemplates();
+    }
+    
+    // Render letter templates in the sidebar
+    function renderTemplates() {
+      const templatesContainer = document.getElementById('letter-templates');
+      templatesContainer.innerHTML = '';
+      
+      letterTemplates.forEach(template => {
+        const templateElement = document.createElement('div');
+        templateElement.className = 'letter-template';
+        templateElement.innerHTML = `
+          <h6>${template.name}</h6>
+          <p class="text-muted small mb-1">${template.subject.substring(0, 50)}...</p>
+          <div class="d-flex justify-content-between mt-2">
+            <button class="btn btn-sm btn-outline-primary" onclick="loadTemplate(${template.id})">Load</button>
+            <button class="btn btn-sm btn-outline-danger" onclick="deleteTemplate(${template.id})">Delete</button>
+          </div>
+        `;
+        
+        templatesContainer.appendChild(templateElement);
+      });
+    }
+    
+    // Load a template into the editor
+    function loadTemplate(templateId) {
+      const template = letterTemplates.find(t => t.id === templateId);
+      if (template) {
+        document.getElementById('letter-subject').value = template.subject;
+        document.getElementById('letter-content').value = template.content;
+        
+        // Highlight the selected template
+        document.querySelectorAll('.letter-template').forEach(el => {
+          el.classList.remove('active');
+        });
+        event.target.closest('.letter-template').classList.add('active');
+      }
+    }
+    
+    // Show add template modal
+    function showAddTemplateModal() {
+      // Reset form
+      document.getElementById('templateForm').reset();
+      
+      const modal = new bootstrap.Modal(document.getElementById('addTemplateModal'));
+      modal.show();
+    }
+    
+    // Save a new template
+    function saveTemplate() {
+      const name = document.getElementById('template-name').value;
+      const subject = document.getElementById('template-subject').value;
+      const content = document.getElementById('template-content').value;
+      
+      if (!name || !subject || !content) {
+        alert('Please fill all fields');
+        return;
+      }
+      
+      const newTemplate = {
+        id: letterTemplates.length > 0 ? Math.max(...letterTemplates.map(t => t.id)) + 1 : 1,
+        name: name,
+        subject: subject,
+        content: content
+      };
+      
+      letterTemplates.push(newTemplate);
+      localStorage.setItem('aust_letterTemplates', JSON.stringify(letterTemplates));
+      
+      renderTemplates();
+      
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addTemplateModal'));
+      modal.hide();
+      
+      alert('Template saved successfully!');
+    }
+    
+    // Delete a template
+    function deleteTemplate(templateId) {
+      if (confirm('Are you sure you want to delete this template?')) {
+        letterTemplates = letterTemplates.filter(t => t.id !== templateId);
+        localStorage.setItem('aust_letterTemplates', JSON.stringify(letterTemplates));
+        renderTemplates();
+        
+        alert('Template deleted successfully!');
+      }
+    }
+    
+    // Update recipient options based on selection
+    function updateRecipientOptions() {
+      const recipientType = document.getElementById('recipient-type').value;
+      
+      // Hide all options first
+      document.getElementById('faculty-options').style.display = 'none';
+      document.getElementById('program-options').style.display = 'none';
+      document.getElementById('individual-options').style.display = 'none';
+      
+      // Show relevant options
+      if (recipientType === 'faculty') {
+        document.getElementById('faculty-options').style.display = 'block';
+      } else if (recipientType === 'program') {
+        document.getElementById('program-options').style.display = 'block';
+      } else if (recipientType === 'individual') {
+        document.getElementById('individual-options').style.display = 'block';
+      }
+      
+      updateRecipientCount();
+    }
+    
+    // Update the recipient count display
+    function updateRecipientCount() {
+      const recipientType = document.getElementById('recipient-type').value;
+      let count = 0;
+      
+      if (recipientType === 'all') {
+        count = students.length;
+      } else if (recipientType === 'admitted') {
+        count = students.filter(s => s.status === 'admitted').length;
+      } else if (recipientType === 'pending') {
+        count = students.filter(s => s.status === 'pending').length;
+      } else if (recipientType === 'faculty') {
+        const faculty = document.getElementById('faculty-select').value;
+        if (faculty) {
+          count = students.filter(s => s.faculty === faculty).length;
+        }
+      } else if (recipientType === 'program') {
+        const program = document.getElementById('program-select').value;
+        if (program) {
+          count = students.filter(s => s.program === program).length;
+        }
+      } else if (recipientType === 'individual') {
+        const selectedStudents = Array.from(document.getElementById('student-select').selectedOptions);
+        count = selectedStudents.length;
+      }
+      
+      document.getElementById('recipient-count').textContent = count;
+    }
+    
+    // Populate faculty options
+    function populateFacultyOptions() {
+      const facultySelect = document.getElementById('faculty-select');
+      facultySelect.innerHTML = '<option value="">Select Faculty</option>';
+      
+      faculties.forEach(faculty => {
+        const option = document.createElement('option');
+        option.value = faculty;
+        option.textContent = faculty;
+        facultySelect.appendChild(option);
+      });
+      
+      facultySelect.addEventListener('change', updateRecipientCount);
+    }
+    
+    // Populate program options
+    function populateProgramOptions() {
+      const programSelect = document.getElementById('program-select');
+      programSelect.innerHTML = '<option value="">Select Program</option>';
+      
+      programs.forEach(program => {
+        const option = document.createElement('option');
+        option.value = program;
+        option.textContent = program;
+        programSelect.appendChild(option);
+      });
+      
+      programSelect.addEventListener('change', updateRecipientCount);
+    }
+    
+    // Populate student options
+    function populateStudentOptions() {
+      const studentSelect = document.getElementById('student-select');
+      studentSelect.innerHTML = '';
+      
+      students.forEach(student => {
+        const option = document.createElement('option');
+        option.value = student.application_id;
+        option.textContent = `${student.application_id} - ${student.fullName} (${student.program})`;
+        studentSelect.appendChild(option);
+      });
+      
+      studentSelect.addEventListener('change', updateRecipientCount);
+    }
+    
+    // Insert placeholder into the letter content
+    function insertPlaceholder(placeholder) {
+      const contentTextarea = document.getElementById('letter-content');
+      const startPos = contentTextarea.selectionStart;
+      const endPos = contentTextarea.selectionEnd;
+      const content = contentTextarea.value;
+      
+      contentTextarea.value = content.substring(0, startPos) + placeholder + content.substring(endPos);
+      contentTextarea.focus();
+      contentTextarea.setSelectionRange(startPos + placeholder.length, startPos + placeholder.length);
+    }
+    
+    // Preview letter
+    function previewLetter() {
+      const subject = document.getElementById('letter-subject').value;
+      const content = document.getElementById('letter-content').value;
+      
+      if (!subject || !content) {
+        alert('Please enter both subject and content for the letter');
+        return;
+      }
+      
+      const previewDiv = document.getElementById('letter-preview');
+      const sampleStudent = students[0] || {
+        fullName: 'John Doe',
+        application_id: 'APP2024001',
+        program: 'Computer Science',
+        faculty: 'Faculty of Science',
+        jamb_score: '280',
+        cgpa: '4.2',
+        status: 'admitted'
+      };
+      
+      let previewContent = content;
+      previewContent = previewContent.replace(/{student_name}/g, sampleStudent.fullName);
+      previewContent = previewContent.replace(/{application_id}/g, sampleStudent.application_id);
+      previewContent = previewContent.replace(/{program}/g, sampleStudent.program);
+      previewContent = previewContent.replace(/{faculty}/g, sampleStudent.faculty);
+      previewContent = previewContent.replace(/{jamb_score}/g, sampleStudent.jamb_score);
+      previewContent = previewContent.replace(/{cgpa}/g, sampleStudent.cgpa);
+      previewContent = previewContent.replace(/{current_date}/g, new Date().toLocaleDateString());
+      previewContent = previewContent.replace(/{academic_session}/g, '2024/2025');
+      previewContent = previewContent.replace(/{admission_status}/g, sampleStudent.status);
+      
+      previewDiv.innerHTML = `
+        <div class="border-bottom pb-3 mb-3">
+          <h4>${subject}</h4>
+          <p class="text-muted mb-0">Preview for: ${sampleStudent.fullName}</p>
+        </div>
+        <div style="white-space: pre-line; line-height: 1.6;">${previewContent}</div>
+      `;
+      
+      document.getElementById('preview-section').style.display = 'block';
+    }
+    
+    // Send letters to selected recipients
+    async function sendLetters() {
+      const subject = document.getElementById('letter-subject').value;
+      const content = document.getElementById('letter-content').value;
+      
+      if (!subject || !content) {
+        alert('Please enter both subject and content for the letter');
+        return;
+      }
+      
+      const recipients = getSelectedRecipients();
+      
+      if (recipients.length === 0) {
+        alert('Please select at least one recipient');
+        return;
+      }
+      
+      if (!confirm(`Are you sure you want to send this letter to ${recipients.length} recipients?`)) {
+        return;
+      }
+      
+      // Show loading state
+      const sendBtn = event.target;
+      const originalText = sendBtn.innerHTML;
+      sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Sending...';
+      sendBtn.disabled = true;
+      
+      try {
+        let successCount = 0;
+        let errorCount = 0;
+        
+        for (const recipient of recipients) {
+          try {
+            // Personalize content for each recipient
+            let personalizedContent = content;
+            personalizedContent = personalizedContent.replace(/{student_name}/g, recipient.fullName);
+            personalizedContent = personalizedContent.replace(/{application_id}/g, recipient.application_id);
+            personalizedContent = personalizedContent.replace(/{program}/g, recipient.program);
+            personalizedContent = personalizedContent.replace(/{faculty}/g, recipient.faculty);
+            personalizedContent = personalizedContent.replace(/{jamb_score}/g, recipient.jambScore);
+            personalizedContent = personalizedContent.replace(/{cgpa}/g, recipient.cgpa);
+            personalizedContent = personalizedContent.replace(/{current_date}/g, new Date().toLocaleDateString());
+            personalizedContent = personalizedContent.replace(/{academic_session}/g, '2024/2025');
+            personalizedContent = personalizedContent.replace(/{admission_status}/g, recipient.status);
+            
+            // In a real implementation, this would send an email via your backend
+            console.log(`Sending to: ${recipient.email}`);
+            console.log(`Subject: ${subject}`);
+            console.log(`Content: ${personalizedContent.substring(0, 100)}...`);
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            successCount++;
+          } catch (error) {
+            console.error(`Error sending to ${recipient.email}:`, error);
+            errorCount++;
+          }
+        }
+        
+        alert(`Letters sent successfully!\n\nSuccessful: ${successCount}\nFailed: ${errorCount}`);
+        
+      } catch (error) {
+        alert('Error sending letters. Please try again.');
+      } finally {
+        // Restore button state
+        sendBtn.innerHTML = originalText;
+        sendBtn.disabled = false;
+      }
+    }
+    
+    // Print letters for selected recipients
+    function printLetters() {
+      const subject = document.getElementById('letter-subject').value;
+      const content = document.getElementById('letter-content').value;
+      
+      if (!subject || !content) {
+        alert('Please enter both subject and content for the letter');
+        return;
+      }
+      
+      const recipients = getSelectedRecipients();
+      
+      if (recipients.length === 0) {
+        alert('Please select at least one recipient');
+        return;
+      }
+      
+      // Create a print window with all letters
+      const printWindow = window.open('', '_blank');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>AUST Letters - ${subject}</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              .letter { margin-bottom: 40px; page-break-after: always; }
+              .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #004080; padding-bottom: 20px; }
+              .content { line-height: 1.6; white-space: pre-line; }
+              .footer { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 20px; }
+              @media print {
+                .letter { page-break-after: always; }
+              }
+            </style>
+          </head>
+          <body>
+      `);
+      
+      recipients.forEach(recipient => {
+        let personalizedContent = content;
+        personalizedContent = personalizedContent.replace(/{student_name}/g, recipient.fullName);
+        personalizedContent = personalizedContent.replace(/{application_id}/g, recipient.application_id);
+        personalizedContent = personalizedContent.replace(/{program}/g, recipient.program);
+        personalizedContent = personalizedContent.replace(/{faculty}/g, recipient.faculty);
+        personalizedContent = personalizedContent.replace(/{jamb_score}/g, recipient.jambScore);
+        personalizedContent = personalizedContent.replace(/{cgpa}/g, recipient.cgpa);
+        personalizedContent = personalizedContent.replace(/{current_date}/g, new Date().toLocaleDateString());
+        personalizedContent = personalizedContent.replace(/{academic_session}/g, '2024/2025');
+        personalizedContent = personalizedContent.replace(/{admission_status}/g, recipient.status);
+        
+        printWindow.document.write(`
+          <div class="letter">
+            <div class="header">
+              <h2>African University of Science and Technology</h2>
+              <h3>${subject}</h3>
+              <p><strong>Recipient:</strong> ${recipient.fullName} | <strong>Application ID:</strong> ${recipient.application_id}</p>
+            </div>
+            <div class="content">
+              ${personalizedContent}
+            </div>
+            <div class="footer">
+              <p>Date: ${new Date().toLocaleDateString()}</p>
+              <p><strong>Admissions Office</strong><br>
+              African University of Science and Technology, Abuja</p>
+            </div>
+          </div>
+        `);
+      });
+      
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      
+      // Wait for content to load then print
+      printWindow.onload = function() {
+        printWindow.print();
+      };
+    }
+    
+    // Get selected recipients based on current filters
+    function getSelectedRecipients() {
+      const recipientType = document.getElementById('recipient-type').value;
+      
+      if (recipientType === 'all') {
+        return students;
+      } else if (recipientType === 'admitted') {
+        return students.filter(s => s.status === 'admitted');
+      } else if (recipientType === 'pending') {
+        return students.filter(s => s.status === 'pending');
+      } else if (recipientType === 'faculty') {
+        const faculty = document.getElementById('faculty-select').value;
+        return faculty ? students.filter(s => s.faculty === faculty) : [];
+      } else if (recipientType === 'program') {
+        const program = document.getElementById('program-select').value;
+        return program ? students.filter(s => s.program === program) : [];
+      } else if (recipientType === 'individual') {
+        const selectedAppIds = Array.from(document.getElementById('student-select').selectedOptions).map(opt => opt.value);
+        return students.filter(s => selectedAppIds.includes(s.application_id));
+      }
+      
+      return [];
+    }
+    
+    // Quick action functions
+    function generateAdmissionLetters() {
+      document.getElementById('recipient-type').value = 'admitted';
+      updateRecipientOptions();
+      loadTemplate(1); // Load admission offer template
+      alert('Admitted students selected and admission template loaded. Click "Send Letters" to proceed.');
+    }
+    
+    function sendWelcomeEmails() {
+      document.getElementById('recipient-type').value = 'admitted';
+      updateRecipientOptions();
+      loadTemplate(3); // Load welcome email template
+      alert('Admitted students selected and welcome template loaded. Click "Send Letters" to proceed.');
+    }
+    
+    function sendFeeReminders() {
+      document.getElementById('recipient-type').value = 'all';
+      updateRecipientOptions();
+      loadTemplate(2); // Load fee reminder template
+      alert('All students selected and fee reminder template loaded. Click "Send Letters" to proceed.');
+    }
+  </script>
+</body>
+</html>

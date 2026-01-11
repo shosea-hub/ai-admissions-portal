@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUST | AI-Powered Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #004080;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            min-height: 100vh;
+            width: 250px;
+            transition: all 0.3s;
+            position: fixed;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
+        .sidebar-header img {
+            max-height: 50px;
+        }
+        
+        .sidebar ul.components {
+            padding: 20px 0;
+        }
+        
+        .sidebar ul li a {
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar ul li a:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .sidebar ul li.active a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+            flex: 1;
+            width: calc(100% - 250px);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        .dashboard-card {
+            height: 100%;
+            transition: transform 0.3s;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .dashboard-card .card-icon {
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+        
+        .student-card {
+            border-left: 4px solid #4e73df;
+        }
+        
+        .lecturer-card {
+            border-left: 4px solid #1cc88a;
+        }
+        
+        .admin-card {
+            border-left: 4px solid #36b9cc;
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 5px;
+        }
+        
+        .applicant-actions {
+            white-space: nowrap;
+        }
+        
+        .applicant-actions .btn {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .ai-score {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .photo-thumbnail {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ddd;
+            transition: transform 0.2s ease;
+        }
+
+        .photo-thumbnail:hover {
+            transform: scale(1.1);
+        }
+
+        .applicant-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #004080;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .user-role-badge {
+            font-size: 0.7em;
+            padding: 3px 8px;
+            border-radius: 15px;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            max-width: 300px;
+        }
+
+        .table th {
+            font-weight: 600;
+            background-color: #f8f9fa;
+        }
+
+        .ai-processing-card {
+            border-left: 4px solid #764ba2;
+        }
+        
+        .feature-importance-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        
+        .feature-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .model-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .model-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .model-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .training-progress {
+            height: 8px;
+            margin-top: 5px;
+        }
+
+        .application-row {
+            transition: background-color 0.2s ease;
+        }
+
+        .application-row:hover {
+            background-color: #f8f9fa;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .alert {
+            animation: slideInRight 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                margin-left: -250px;
+            }
+            .sidebar.active {
+                margin-left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            .main-content.active {
+                margin-left: 250px;
+                width: calc(100% - 250px);
+            }
+            .applicant-actions .btn {
+                margin-bottom: 5px;
+                display: block;
+                width: 100%;
+            }
+            .stats-card .row {
+                text-align: center;
+            }
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTkEkTZ14LjCVAuqbqQnIaOg4HPQ10AfyZ8w&s" alt="AUST Logo" class="logo">
+                <h5 class="mt-2 text-white">AI Admin Portal</h5>
+                <small class="text-light">Chapter 3 Implementation</small>
+            </div>
+            
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('applications')"><i class="fas fa-file-alt me-2"></i> Applications <span class="ai-badge">AI</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('students')"><i class="fas fa-users me-2"></i> Students</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('user-management')"><i class="fas fa-user-shield me-2"></i> User Management</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('lecturers')"><i class="fas fa-chalkboard-teacher me-2"></i> Lecturers</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('courses')"><i class="fas fa-book me-2"></i> Courses</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('finance')"><i class="fas fa-money-bill-wave me-2"></i> Finance</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('reports')"><i class="fas fa-chart-bar me-2"></i> Reports</a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('ai-models')"><i class="fas fa-robot me-2"></i> AI Models <span class="ai-badge">ML</span></a>
+                </li>
+                <li>
+                    <a href="#" onclick="showSection('settings')"><i class="fas fa-cog me-2"></i> Settings</a>
+                </li>
+                <li class="mt-4">
+                    <a href="apply" target="_blank"><i class="fas fa-plus-circle me-2"></i> New Application</a>
+                </li>
+                <li>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                <div class="container-fluid">
+                    <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="navbar-nav ms-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-1"></i> Admin User
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="showProfileModal()"><i class="fas fa-user me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="showSettingsModal()"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" onclick="logout()">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Flash Alert Container -->
+            <div id="flash-alert" style="position: fixed; top: 10px; right: 10px; z-index: 2000;"></div>
+            
+            <div class="container-fluid">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="section active">
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h3 class="mb-4">AI-Powered Admission Dashboard</h3>
+                            <p class="text-muted">Real-time monitoring of admission process with AI evaluation</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Stats Row -->
+                    <div class="row mb-4">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="stats-label">TOTAL APPLICATIONS</div>
+                                        <div class="stats-number" id="total-applications">0</div>
+                                        <small><i class="fas fa-sync-alt me-1"></i> Updated just now</small>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-file-alt fa-3x text-white-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="stats-label">PENDING REVIEW <span class="ai-badge">AI</span></div>
+                                        <div class="stats-number" id="pending-applications">0</div>
+                                        <small><i class="fas fa-clock me-1"></i> Awaiting AI evaluation</small>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-clock fa-3x text-white-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="stats-label">ADMITTED STUDENTS</div>
+                                        <div class="stats-number" id="admitted-students">0</div>
+                                        <small><i class="fas fa-user-graduate me-1"></i> Successful admissions</small>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user-graduate fa-3x text-white-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="stats-card">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="stats-label">AI ACCURACY SCORE</div>
+                                        <div class="stats-number" id="ai-accuracy">92%</div>
+                                        <small><i class="fas fa-robot me-1"></i> Model performance</small>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-robot fa-3x text-white-50"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">Recent AI Processed Applications</h5>
+                                    <button class="btn btn-sm btn-primary" onclick="loadApplications()">
+                                        <i class="fas fa-sync-alt me-1"></i> Refresh
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Photo</th>
+                                                    <th>App ID</th>
+                                                    <th>Name</th>
+                                                    <th>Program</th>
+                                                    <th>Course</th>
+                                                    <th>AI Score</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="recent-applications">
+                                                <tr>
+                                                    <td colspan="9" class="text-center py-4">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <p class="mt-2 text-muted">Loading applications...</p>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Applications Section -->
+                <div id="applications-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Admission Applications <span class="ai-badge">AI-Powered</span></h5>
+                            <div class="d-flex">
+                                <input type="text" class="form-control me-2" placeholder="Search applications..." id="applicationSearch">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown">
+                                        <i class="fas fa-filter me-1"></i> Filter
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="filterApplications('all')">All Applications</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterApplications('Admitted')">Admitted</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterApplications('Under Review')">Under Review</a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="filterApplications('Rejected')">Rejected</a></li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-primary ms-2" onclick="loadApplications()">
+                                    <i class="fas fa-sync-alt me-1"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Photo</th>
+                                            <th>App ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Program</th>
+                                            <th>Course</th>
+                                            <th>AI Score</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="applications-table">
+                                        <tr>
+                                            <td colspan="10" class="text-center py-4">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <p class="mt-2 text-muted">Loading applications...</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Models Section -->
+                <div id="ai-models-section" class="section">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card ai-processing-card mb-4">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">AI Processing Settings <span class="ai-badge">Enhanced</span></h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="aiProcessingForm">
+                                        <div class="row mb-4">
+                                            <div class="col-md-6">
+                                                <label class="form-label">AI Model Selection</label>
+                                                <select class="form-select" id="ai_selected_model">
+                                                    <option value="Random Forest">Random Forest</option>
+                                                    <option value="Gradient Boosting">Gradient Boosting</option>
+                                                    <option value="Logistic Regression">Logistic Regression</option>
+                                                </select>
+                                                <div class="form-text">Choose the machine learning model for applicant evaluation</div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Acceptance Threshold (0.0 - 1.0)</label>
+                                                <input type="number" step="0.01" min="0" max="1" class="form-control" id="ai_acceptance_threshold" value="0.75">
+                                                <div class="form-text">Higher values require stronger applicants</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label">AI Prompt Instructions</label>
+                                            <textarea class="form-control" id="ai_prompt_text" rows="3" placeholder="Describe how the AI should evaluate applicants..."></textarea>
+                                            <div class="form-text">Provide guidance for the AI evaluation process</div>
+                                        </div>
+                                        
+                                        <div class="row mb-4">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Advanced Settings</label>
+                                                <div class="form-check form-switch mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="enable_ocr" checked>
+                                                    <label class="form-check-label" for="enable_ocr">Enable OCR for document processing</label>
+                                                </div>
+                                                <div class="form-check form-switch mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="enable_nlp" checked>
+                                                    <label class="form-check-label" for="enable_nlp">Enable NLP for application analysis</label>
+                                                </div>
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="fairness_check" checked>
+                                                    <label class="form-check-label" for="fairness_check">Enable fairness and bias checking</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-primary" id="ai_save_settings">
+                                                <i class="fas fa-save me-1"></i> Save Settings
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary" id="ai_load_settings">
+                                                <i class="fas fa-sync me-1"></i> Load Settings
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="card ai-processing-card mb-4">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Model Training & Retraining</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Training Data (CSV)</label>
+                                        <input type="file" class="form-control" id="ai_training_file" accept=".csv">
+                                        <div class="form-text">
+                                            CSV format: program, course, jamb, cgpa, age, composite_score, eligible
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-success" id="ai_retrain_btn">
+                                            <i class="fas fa-brain me-1"></i> Upload & Retrain Model
+                                        </button>
+                                    </div>
+                                    <div class="progress training-progress" style="display: none;" id="training-progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card ai-processing-card mb-4">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Model Performance</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-4">
+                                        <div class="display-4 text-primary fw-bold" id="ai_model_accuracy">--%</div>
+                                        <p class="text-muted">Current Model Accuracy</p>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6>Model Status</h6>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Model Loaded:</span>
+                                            <span id="model-loaded-status" class="model-status model-inactive">Not Loaded</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Last Training:</span>
+                                            <span id="last-training-date">Never</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>Total Features:</span>
+                                            <span id="total-features">0</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <h6>System Status</h6>
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Applications Processed:</span>
+                                            <span id="apps-processed">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span>AI Fairness Score:</span>
+                                            <span id="fairness-score">--%</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-outline-primary w-100" onclick="checkSystemStatus()">
+                                        <i class="fas fa-sync me-1"></i> Refresh Status
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="card ai-processing-card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Feature Importance</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="feature-importance-container">
+                                        <p class="text-muted text-center">Train a model to see feature importance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Section -->
+                <div id="settings-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">System Settings</h5>
+                            <div><small class="text-muted">Manage application & AI configuration</small></div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general-settings" type="button" role="tab">General Settings</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai-settings" type="button" role="tab">AI Processing Settings</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="logs-tab" data-bs-toggle="tab" data-bs-target="#system-logs" type="button" role="tab">System Logs</button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="settingsTabContent">
+                                <!-- General Settings -->
+                                <div class="tab-pane fade show active" id="general-settings" role="tabpanel">
+                                    <h6>General Settings</h6>
+                                    <p class="text-muted small">Application-wide settings and preferences.</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Institution Name</label>
+                                            <input class="form-control" id="inst_name" value="AUST" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Academic Year</label>
+                                            <input class="form-control" id="academic_year" value="2025/2026" />
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <button class="btn btn-primary" onclick="saveGeneralSettings()">Save General Settings</button>
+                                    </div>
+                                </div>
+
+                                <!-- AI Processing Settings -->
+                                <div class="tab-pane fade" id="ai-settings" role="tabpanel">
+                                    <h6>AI Processing Settings</h6>
+                                    <p class="text-muted small">Configure how the AI evaluates applications.</p>
+
+                                    <form id="aiSettingsForm">
+                                        <div class="row mb-3">
+                                            <div class="col-md-4">
+                                                <label class="form-label">AI Model</label>
+                                                <select class="form-select" id="ai_model_select">
+                                                    <option value="Random Forest">Random Forest</option>
+                                                    <option value="Gradient Boosting">Gradient Boosting</option>
+                                                    <option value="Logistic Regression">Logistic Regression</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Acceptance Threshold (0.0 - 1.0)</label>
+                                                <input type="number" step="0.01" min="0" max="1" class="form-control" id="ai_threshold" value="0.75">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Training CSV</label>
+                                                <input type="file" class="form-control" id="ai_training_csv" accept=".csv">
+                                                <small class="text-muted">CSV columns: program,jamb,cgpa,age,score,eligible</small>
+                                                <button type="button" class="btn btn-success btn-sm mt-2" id="ai_upload_btn">Upload & Retrain</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">AI Prompt Instructions</label>
+                                            <textarea class="form-control" id="ai_prompt" rows="3" placeholder="Describe what the AI should consider..."></textarea>
+                                        </div>
+
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-primary" id="ai_save_btn">Save Settings</button>
+                                            <button type="button" class="btn btn-outline-secondary" id="ai_load_btn">Load Settings</button>
+                                        </div>
+                                    </form>
+
+                                    <div class="row mt-4" id="aiMetrics" style="display:none;">
+                                        <div class="col-md-4">
+                                            <div class="card text-center">
+                                                <div class="card-body">
+                                                    <h6>Model Accuracy</h6>
+                                                    <h3 id="ai_accuracy_display">--%</h3>
+                                                    <p class="text-muted small">On training data</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h6>Feature Importance</h6>
+                                                    <canvas id="aiFeatureChart" height="120"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- System Logs -->
+                                <div class="tab-pane fade" id="system-logs" role="tabpanel">
+                                    <h6>System Logs</h6>
+                                    <p class="text-muted small">Recent system events (newest first).</p>
+                                    <div class="table-responsive" style="max-height:360px; overflow:auto;">
+                                        <table class="table table-sm table-striped" id="systemLogsTable">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Timestamp</th>
+                                                    <th>Event</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="systemLogsBody">
+                                                <tr><td colspan="3" class="text-center text-muted py-4">Loading logs...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button class="btn btn-outline-secondary btn-sm" onclick="loadSystemLogs()">Refresh Logs</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reports Section -->
+                <div id="reports-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Reports & Analytics <span class="ai-badge">AI Insights</span></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-chart-line me-2"></i>
+                                        <strong>AI-Powered Analytics:</strong> Generate comprehensive reports with AI-driven insights and predictive analytics.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Admission Statistics</h5>
+                                            <canvas id="enrollmentChart" height="250"></canvas>
+                                            <div class="mt-3">
+                                                <button class="btn btn-primary btn-sm" onclick="generateEnrollmentReport()">
+                                                    <i class="fas fa-download me-1"></i> Download Report
+                                                </button>
+                                                <button class="btn btn-outline-primary btn-sm ms-2" onclick="viewEnrollmentDetails()">
+                                                    <i class="fas fa-eye me-1"></i> View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Fee Collection Analytics</h5>
+                                            <canvas id="financeChart" height="250"></canvas>
+                                            <div class="mt-3">
+                                                <button class="btn btn-success btn-sm" onclick="generateFinanceReport()">
+                                                    <i class="fas fa-download me-1"></i> Download Report
+                                                </button>
+                                                <button class="btn btn-outline-success btn-sm ms-2" onclick="viewFinanceDetails()">
+                                                    <i class="fas fa-eye me-1"></i> View Details
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-user-check fa-3x text-primary mb-3"></i>
+                                            <h5>Admission Rate</h5>
+                                            <h2 class="text-primary" id="admission-rate">68%</h2>
+                                            <p class="text-muted">Successful Admissions</p>
+                                            <button class="btn btn-outline-primary btn-sm" onclick="generateAdmissionRateReport()">
+                                                <i class="fas fa-chart-pie me-1"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-robot fa-3x text-success mb-3"></i>
+                                            <h5>AI Accuracy</h5>
+                                            <h2 class="text-success" id="ai-accuracy-rate">92%</h2>
+                                            <p class="text-muted">Prediction Accuracy</p>
+                                            <button class="btn btn-outline-success btn-sm" onclick="generateAIReport()">
+                                                <i class="fas fa-brain me-1"></i> AI Report
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-graduation-cap fa-3x text-info mb-3"></i>
+                                            <h5>Completion Rate</h5>
+                                            <h2 class="text-info" id="completion-rate">85%</h2>
+                                            <p class="text-muted">Program Completion</p>
+                                            <button class="btn btn-outline-info btn-sm" onclick="generateCompletionReport()">
+                                                <i class="fas fa-trophy me-1"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="card-title mb-0">Quick Reports Generator</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3">
+                                                    <div class="card report-card">
+                                                        <div class="card-body text-center">
+                                                            <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                                                            <h6>Student List</h6>
+                                                            <p class="text-muted small">Complete student database</p>
+                                                            <button class="btn btn-primary btn-sm w-100" onclick="generateStudentList()">
+                                                                <i class="fas fa-download me-1"></i> Generate
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <div class="card report-card">
+                                                        <div class="card-body text-center">
+                                                            <i class="fas fa-money-bill fa-2x text-success mb-2"></i>
+                                                            <h6>Payment Report</h6>
+                                                            <p class="text-muted small">Financial transactions</p>
+                                                            <button class="btn btn-success btn-sm w-100" onclick="generatePaymentReport()">
+                                                                <i class="fas fa-download me-1"></i> Generate
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <div class="card report-card">
+                                                        <div class="card-body text-center">
+                                                            <i class="fas fa-book fa-2x text-info mb-2"></i>
+                                                            <h6>Course Report</h6>
+                                                            <p class="text-muted small">Course enrollment data</p>
+                                                            <button class="btn btn-info btn-sm w-100" onclick="generateCourseReport()">
+                                                                <i class="fas fa-download me-1"></i> Generate
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <div class="card report-card">
+                                                        <div class="card-body text-center">
+                                                            <i class="fas fa-file-alt fa-2x text-warning mb-2"></i>
+                                                            <h6>Admission Report</h6>
+                                                            <p class="text-muted small">Admission statistics</p>
+                                                            <button class="btn btn-warning btn-sm w-100" onclick="generateAdmissionReport()">
+                                                                <i class="fas fa-download me-1"></i> Generate
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row mt-4">
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6>Custom Report Generator</h6>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Report Type</label>
+                                                                <select class="form-select" id="customReportType">
+                                                                    <option value="admissions">Admissions Report</option>
+                                                                    <option value="finance">Financial Report</option>
+                                                                    <option value="academic">Academic Performance</option>
+                                                                    <option value="ai">AI Performance</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label class="form-label">Date Range</label>
+                                                                <select class="form-select" id="reportDateRange">
+                                                                    <option value="last_week">Last Week</option>
+                                                                    <option value="last_month">Last Month</option>
+                                                                    <option value="last_quarter">Last Quarter</option>
+                                                                    <option value="last_year">Last Year</option>
+                                                                    <option value="custom">Custom Range</option>
+                                                                </select>
+                                                            </div>
+                                                            <button class="btn btn-primary w-100" onclick="generateCustomReport()">
+                                                                <i class="fas fa-cog me-1"></i> Generate Custom Report
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h6>Report Statistics</h6>
+                                                            <div class="row text-center">
+                                                                <div class="col-6 mb-3">
+                                                                    <div class="border rounded p-3">
+                                                                        <h4 class="text-primary" id="total-reports">24</h4>
+                                                                        <small class="text-muted">Total Reports</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6 mb-3">
+                                                                    <div class="border rounded p-3">
+                                                                        <h4 class="text-success" id="reports-this-month">8</h4>
+                                                                        <small class="text-muted">This Month</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="border rounded p-3">
+                                                                        <h4 class="text-info" id="ai-reports">15</h4>
+                                                                        <small class="text-muted">AI Reports</small>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <div class="border rounded p-3">
+                                                                        <h4 class="text-warning" id="scheduled-reports">3</h4>
+                                                                        <small class="text-muted">Scheduled</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Other sections would go here -->
+                <div id="students-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Student Management</h5>
+                            <div>
+                                <button class="btn btn-primary me-2" onclick="showAddStudentModal()">
+                                    <i class="fas fa-plus me-1"></i> Add Student
+                                </button>
+                                <button class="btn btn-success" onclick="exportStudents()">
+                                    <i class="fas fa-file-export me-1"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <select class="form-select" id="student-faculty-filter" onchange="filterStudents()">
+                                        <option value="">All Faculties</option>
+                                        <option>Faculty of Science</option>
+                                        <option>Faculty of Engineering</option>
+                                        <option>School of Administration, Business & Management Sciences</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="student-dept-filter" onchange="filterStudents()">
+                                        <option value="">All Departments</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="student-level-filter" onchange="filterStudents()">
+                                        <option value="">All Levels</option>
+                                        <option>100 Level</option>
+                                        <option>200 Level</option>
+                                        <option>300 Level</option>
+                                        <option>400 Level</option>
+                                        <option>500 Level</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control" placeholder="Search students..." id="studentSearch" onkeyup="filterStudents()">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Matric No.</th>
+                                            <th>Name</th>
+                                            <th>Gender</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Level</th>
+                                            <th>Program</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="students-table">
+                                        <!-- Filled by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="user-management-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">User Management</h5>
+                            <div>
+                                <button class="btn btn-primary" onclick="showAddUserModal()">
+                                    <i class="fas fa-plus me-1"></i> Add User
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Department</th>
+                                            <th>Status</th>
+                                            <th>Last Login</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table">
+                                        <tr>
+                                            <td>ADM001</td>
+                                            <td>Admin User</td>
+                                            <td>admin@aust.edu.ng</td>
+                                            <td><span class="badge bg-danger">Super Admin</span></td>
+                                            <td>-</td>
+                                            <td><span class="badge bg-success">Active</span></td>
+                                            <td>2024-01-15 10:30</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="lecturers-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Lecturer Management</h5>
+                            <div>
+                                <button class="btn btn-primary me-2" onclick="showAddLecturerModal()">
+                                    <i class="fas fa-plus me-1"></i> Add Lecturer
+                                </button>
+                                <button class="btn btn-success" onclick="exportLecturers()">
+                                    <i class="fas fa-file-export me-1"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <select class="form-select" id="lecturer-faculty-filter" onchange="filterLecturers()">
+                                        <option value="">All Faculties</option>
+                                        <option>Faculty of Science</option>
+                                        <option>Faculty of Engineering</option>
+                                        <option>School of Administration, Business & Management Sciences</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="lecturer-dept-filter" onchange="filterLecturers()">
+                                        <option value="">All Departments</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" placeholder="Search lecturers..." id="lecturerSearch" onkeyup="filterLecturers()">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Staff ID</th>
+                                            <th>Name</th>
+                                            <th>Gender</th>
+                                            <th>Faculty</th>
+                                            <th>Department</th>
+                                            <th>Position</th>
+                                            <th>Courses</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lecturers-table">
+                                        <!-- Filled by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="courses-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Course Management</h5>
+                            <div>
+                                <button class="btn btn-primary me-2" onclick="showAddCourseModal()">
+                                    <i class="fas fa-plus me-1"></i> Add Course
+                                </button>
+                                <button class="btn btn-success" onclick="exportCourses()">
+                                    <i class="fas fa-file-export me-1"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <select class="form-select" id="course-faculty-filter" onchange="filterCourses()">
+                                        <option value="">All Faculties</option>
+                                        <option>Faculty of Science</option>
+                                        <option>Faculty of Engineering</option>
+                                        <option>School of Administration, Business & Management Sciences</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="course-dept-filter" onchange="filterCourses()">
+                                        <option value="">All Departments</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" placeholder="Search courses..." id="courseSearch" onkeyup="filterCourses()">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Course Code</th>
+                                            <th>Course Title</th>
+                                            <th>Department</th>
+                                            <th>Level</th>
+                                            <th>Credits</th>
+                                            <th>Lecturer</th>
+                                            <th>Students</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="courses-table">
+                                        <!-- Filled by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="finance-section" class="section">
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Financial Management</h5>
+                            <div>
+                                <button class="btn btn-primary" onclick="showAddPaymentModal()">
+                                    <i class="fas fa-plus me-1"></i> Record Payment
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <select class="form-select" id="finance-student-filter" onchange="filterPayments()">
+                                        <option value="">All Students</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="finance-type-filter" onchange="filterPayments()">
+                                        <option value="">All Types</option>
+                                        <option>Tuition Fee</option>
+                                        <option>Acceptance Fee</option>
+                                        <option>Accommodation Fee</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control" placeholder="Search payments..." id="paymentSearch" onkeyup="filterPayments()">
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice No.</th>
+                                            <th>Student</th>
+                                            <th>Matric No.</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="finance-table">
+                                        <!-- Filled by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Details Modal -->
+    <div class="modal fade" id="applicationDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Application Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="applicationDetailsContent">
+                        <!-- Application details will be populated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="editApplication()">Edit</button>
+                    <button type="button" class="btn btn-success" onclick="generateAdmissionLetterFromModal()">Generate Admission Letter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script>
+        // Global variables
+        let applications = [];
+        let currentEditingId = null;
+        let aiFeatureChart = null;
+        let enrollmentChart = null;
+        let financeChart = null;
+
+        // Initialize all dashboard components
+        function initializeDashboard() {
+            // Load initial data
+            loadApplications();
+            loadAISettings();
+            checkSystemStatus();
+            loadSystemLogs();
+            loadReportsData();
+            
+            // Set up auto-refresh
+            setInterval(() => {
+                const activeSection = document.querySelector('.section.active');
+                if (activeSection.id === 'dashboard-section') {
+                    loadApplications();
+                    checkSystemStatus();
+                }
+            }, 30000); // Refresh every 30 seconds
+            
+            // Set up sidebar toggle
+            document.getElementById('sidebarCollapse').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.getElementById('main-content').classList.toggle('active');
+            });
+            
+            // Set up search functionality
+            const searchInput = document.getElementById('applicationSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', searchApplications);
+            }
+            
+            // Set up AI settings handlers
+            setupAISettingsHandlers();
+            
+            // Show welcome message
+            setTimeout(() => {
+                showAlert('Welcome to AUST AI Admin Dashboard!', 'info', 5000);
+            }, 1000);
+        }
+
+        // Setup AI Settings Event Handlers
+        function setupAISettingsHandlers() {
+            // Save AI Settings
+            const saveButtons = ['ai_save_settings', 'ai_save_btn'];
+            saveButtons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.addEventListener('click', saveAISettings);
+            });
+            
+            // Load AI Settings
+            const loadButtons = ['ai_load_settings', 'ai_load_btn'];
+            loadButtons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.addEventListener('click', loadAISettings);
+            });
+            
+            // Upload & Retrain Model
+            const retrainButtons = ['ai_retrain_btn', 'ai_upload_btn'];
+            retrainButtons.forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.addEventListener('click', uploadTrainingData);
+            });
+        }
+
+        // Load applications from server
+        async function loadApplications() {
+            try {
+                showLoadingState('recent-applications');
+                showLoadingState('applications-table');
+                
+                const response = await fetch('/api/get_applications');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                
+                applications = await response.json();
+                renderApplications();
+                updateDashboardStats();
+                showAlert(`Loaded ${applications.length} applications`, 'success');
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                showAlert(`Failed to load applications: ${error.message}`, 'danger');
+                showErrorState('recent-applications');
+                showErrorState('applications-table');
+            }
+        }
+
+        // Show loading state
+        function showLoadingState(tableId) {
+            const table = document.getElementById(tableId);
+            if (table) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Loading applications...</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Show error state
+        function showErrorState(tableId) {
+            const table = document.getElementById(tableId);
+            if (table) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <i class="fas fa-exclamation-triangle text-warning fa-2x mb-2"></i>
+                            <p class="text-muted">Failed to load applications</p>
+                            <button class="btn btn-sm btn-primary" onclick="loadApplications()">
+                                <i class="fas fa-redo me-1"></i> Retry
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Render applications to tables
+        function renderApplications() {
+            renderApplicationsTable('recent-applications', applications.slice(0, 5)); // Show only 5 recent
+            renderApplicationsTable('applications-table', applications);
+        }
+
+        // Render applications to a specific table
+        function renderApplicationsTable(tableId, apps) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            if (!apps || apps.length === 0) {
+                table.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-2"></i>
+                            <p class="text-muted">No applications found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            table.innerHTML = '';
+            apps.forEach(app => {
+                const statusClass = getStatusClass(app.status);
+                const aiEvaluation = app.ai_evaluation || {};
+                
+                const row = document.createElement('tr');
+                row.className = 'application-row';
+                row.innerHTML = `
+                    <td>
+                        ${app.passportPhotoUrl ? 
+                            `<img src="${app.passportPhotoUrl}" class="photo-thumbnail" alt="Passport">` : 
+                            '<i class="fas fa-user-circle text-muted fa-lg"></i>'
+                        }
+                    </td>
+                    <td><strong>${app.application_id || 'N/A'}</strong></td>
+                    <td>${app.fullname || 'N/A'}</td>
+                    <td>${app.email || 'N/A'}</td>
+                    <td>${app.program || 'N/A'}</td>
+                    <td>${app.course || 'N/A'}</td>
+                    <td>
+                        <span class="ai-score">${aiEvaluation.eligibilityScore || 'N/A'}</span>
+                        ${aiEvaluation.aiModelUsed ? `<span class="ai-badge">${aiEvaluation.aiModelUsed}</span>` : ''}
+                    </td>
+                    <td><span class="badge ${statusClass}">${app.status || 'Under Review'}</span></td>
+                    <td>${app.submission_date || 'N/A'}</td>
+                    <td class="applicant-actions">
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewApplication('${app.application_id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        ${app.status === 'Admitted' ? `
+                            <button class="btn btn-sm btn-outline-success" onclick="generateAdmissionLetter('${app.application_id}')">
+                                <i class="fas fa-file-pdf"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        }
+
+        // Get status class for badges
+        function getStatusClass(status) {
+            switch (status) {
+                case 'Admitted': return 'bg-success';
+                case 'Under Review': return 'bg-warning';
+                case 'Rejected': return 'bg-danger';
+                default: return 'bg-secondary';
+            }
+        }
+
+        // Update dashboard statistics
+        function updateDashboardStats() {
+            if (!applications || applications.length === 0) {
+                document.getElementById('total-applications').textContent = '0';
+                document.getElementById('pending-applications').textContent = '0';
+                document.getElementById('admitted-students').textContent = '0';
+                return;
+            }
+
+            const total = applications.length;
+            const pending = applications.filter(app => app.status === 'Under Review').length;
+            const admitted = applications.filter(app => app.status === 'Admitted').length;
+
+            document.getElementById('total-applications').textContent = total;
+            document.getElementById('pending-applications').textContent = pending;
+            document.getElementById('admitted-students').textContent = admitted;
+        }
+
+        // Load AI Settings
+        async function loadAISettings() {
+            try {
+                const response = await fetch('/api/get_settings');
+                if (!response.ok) throw new Error('Failed to load settings');
+                
+                const settings = await response.json();
+                
+                // Update form fields
+                updateAISettingsForm(settings);
+                showAlert('AI settings loaded successfully', 'success');
+            } catch (error) {
+                console.error('Error loading AI settings:', error);
+                showAlert('Failed to load AI settings: ' + error.message, 'warning');
+            }
+        }
+
+        // Update AI Settings Form
+        function updateAISettingsForm(settings) {
+            const fields = [
+                { id: 'ai_selected_model', value: settings.selected_model || 'Random Forest' },
+                { id: 'ai_acceptance_threshold', value: settings.acceptance_threshold || 0.75 },
+                { id: 'ai_prompt_text', value: settings.ai_prompt || '' },
+                { id: 'ai_model_select', value: settings.selected_model || 'Random Forest' },
+                { id: 'ai_threshold', value: settings.acceptance_threshold || 0.75 },
+                { id: 'ai_prompt', value: settings.ai_prompt || '' }
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field.id);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = settings[field.id] !== false;
+                    } else {
+                        element.value = field.value;
+                    }
+                }
+            });
+
+            // Update checkboxes
+            const checkboxes = [
+                { id: 'enable_ocr', value: settings.enable_ocr !== false },
+                { id: 'enable_nlp', value: settings.enable_nlp !== false },
+                { id: 'fairness_check', value: settings.fairness_check !== false }
+            ];
+
+            checkboxes.forEach(checkbox => {
+                const element = document.getElementById(checkbox.id);
+                if (element) {
+                    element.checked = checkbox.value;
+                }
+            });
+        }
+
+        // Save AI Settings
+        async function saveAISettings() {
+            try {
+                const threshold = parseFloat(document.getElementById('ai_acceptance_threshold').value);
+                if (isNaN(threshold) || threshold < 0 || threshold > 1) {
+                    showAlert('Acceptance threshold must be between 0.0 and 1.0', 'warning');
+                    return;
+                }
+
+                const payload = {
+                    selected_model: document.getElementById('ai_selected_model').value,
+                    acceptance_threshold: threshold,
+                    ai_prompt: document.getElementById('ai_prompt_text').value,
+                    enable_ocr: document.getElementById('enable_ocr').checked,
+                    enable_nlp: document.getElementById('enable_nlp').checked,
+                    fairness_check: document.getElementById('fairness_check').checked
+                };
+                
+                const response = await fetch('/api/update_settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                showAlert('AI settings saved successfully', 'success');
+            } catch (error) {
+                console.error('Error saving AI settings:', error);
+                showAlert(`Failed to save AI settings: ${error.message}`, 'danger');
+            }
+        }
+
+        // Upload Training Data and Retrain Model
+        async function uploadTrainingData() {
+            const fileInput = document.getElementById('ai_training_file') || document.getElementById('ai_training_csv');
+            if (!fileInput || !fileInput.files.length) {
+                showAlert('Please select a CSV file first', 'warning');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            
+            // Validate file type
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                showAlert('Please select a CSV file', 'warning');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // Show progress bar
+            const progressBar = document.getElementById('training-progress');
+            const progressFill = progressBar?.querySelector('.progress-bar');
+            
+            if (progressBar && progressFill) {
+                progressBar.style.display = 'block';
+                
+                // Simulate progress updates
+                const progressInterval = setInterval(() => {
+                    const currentWidth = parseInt(progressFill.style.width) || 0;
+                    if (currentWidth < 90) {
+                        progressFill.style.width = (currentWidth + 10) + '%';
+                    }
+                }, 500);
+                
+                try {
+                    const response = await fetch('/api/upload_training_data', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    clearInterval(progressInterval);
+                    progressFill.style.width = '100%';
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `HTTP ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    // Update UI with training results
+                    updateTrainingResults(result);
+                    showAlert(`Model trained successfully with ${result.best_accuracy}% accuracy`, 'success');
+                    
+                } catch (error) {
+                    clearInterval(progressInterval);
+                    progressFill.style.width = '100%';
+                    progressFill.classList.add('bg-danger');
+                    console.error('Error training model:', error);
+                    showAlert(`Training failed: ${error.message}`, 'danger');
+                } finally {
+                    setTimeout(() => {
+                        if (progressBar) {
+                            progressBar.style.display = 'none';
+                            progressFill.style.width = '0%';
+                            progressFill.classList.remove('bg-danger');
+                        }
+                    }, 2000);
+                }
+            }
+        }
+
+        // Update training results in UI
+        function updateTrainingResults(result) {
+            // Update accuracy displays
+            const accuracyElements = ['ai_model_accuracy', 'ai_accuracy_display'];
+            accuracyElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = result.best_accuracy + '%';
+            });
+
+            // Update status information
+            document.getElementById('last-training-date').textContent = new Date().toLocaleDateString();
+            document.getElementById('model-loaded-status').textContent = 'Loaded';
+            document.getElementById('model-loaded-status').className = 'model-status model-active';
+            document.getElementById('total-features').textContent = result.feature_importance ? Object.keys(result.feature_importance).length : 0;
+
+            // Show metrics section
+            const metricsSection = document.getElementById('aiMetrics');
+            if (metricsSection) metricsSection.style.display = 'flex';
+
+            // Update feature importance visualization
+            updateFeatureImportance(result.feature_importance);
+            
+            // Create feature importance chart
+            createFeatureImportanceChart(result.feature_importance);
+        }
+
+        // Update feature importance visualization
+        function updateFeatureImportance(featureImportance) {
+            const container = document.getElementById('feature-importance-container');
+            if (!container) return;
+            
+            if (!featureImportance || Object.keys(featureImportance).length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">No feature importance data available</p>';
+                return;
+            }
+            
+            // Sort features by importance
+            const sortedFeatures = Object.entries(featureImportance)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10); // Show top 10 features
+            
+            let html = '';
+            sortedFeatures.forEach(([feature, importance]) => {
+                const percentage = (importance * 100).toFixed(1);
+                html += `
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-muted">${feature}</small>
+                            <small class="fw-bold">${percentage}%</small>
+                        </div>
+                        <div class="feature-importance-bar">
+                            <div class="feature-bar-fill" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Create feature importance chart
+        function createFeatureImportanceChart(featureImportance) {
+            const ctx = document.getElementById('aiFeatureChart');
+            if (!ctx) return;
+            
+            if (aiFeatureChart) {
+                aiFeatureChart.destroy();
+            }
+            
+            if (!featureImportance || Object.keys(featureImportance).length === 0) {
+                return;
+            }
+            
+            // Sort features by importance and take top 5
+            const sortedFeatures = Object.entries(featureImportance)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+            
+            const labels = sortedFeatures.map(([feature]) => feature);
+            const data = sortedFeatures.map(([, importance]) => importance * 100);
+            
+            aiFeatureChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Importance (%)',
+                        data: data,
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Importance (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Check System Status
+        async function checkSystemStatus() {
+            try {
+                const response = await fetch('/api/system_status');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const status = await response.json();
+                updateSystemStatus(status);
+                
+                // Also update dashboard stats
+                updateDashboardStats();
+                
+                showAlert('System status updated', 'info', 2000);
+            } catch (error) {
+                console.error('Error checking system status:', error);
+                showAlert('Failed to check system status', 'warning');
+            }
+        }
+
+        // Update system status display
+        function updateSystemStatus(status) {
+            // Update status indicators
+            document.getElementById('model-loaded-status').textContent = status.ai_model_loaded ? 'Loaded' : 'Not Loaded';
+            document.getElementById('model-loaded-status').className = status.ai_model_loaded ? 
+                'model-status model-active' : 'model-status model-inactive';
+            document.getElementById('last-training-date').textContent = status.last_training || 'Never';
+            document.getElementById('total-features').textContent = status.feature_count || 0;
+            document.getElementById('apps-processed').textContent = status.total_applications || 0;
+
+            // Update AI accuracy
+            document.getElementById('ai-accuracy').textContent = status.ai_model_loaded ? '92%' : '--%';
+        }
+
+        // Load System Logs
+        async function loadSystemLogs() {
+            try {
+                const response = await fetch('/api/logs');
+                if (!response.ok) throw new Error('Failed to fetch logs');
+                
+                const logs = await response.json();
+                const tbody = document.getElementById('systemLogsBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = '';
+                
+                if (!logs.length) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">No logs available</td></tr>';
+                    return;
+                }
+                
+                // Sort logs by timestamp (newest first)
+                logs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                logs.forEach(log => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${log.timestamp}</td>
+                        <td>${log.event}</td>
+                        <td>${log.details}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading system logs:', error);
+                showAlert('Failed to load system logs: ' + error.message, 'danger');
+            }
+        }
+
+        // Show Alert Function
+        function showAlert(message, type = 'success', timeout = 4000) {
+            const container = document.getElementById('flash-alert');
+            if (!container) return;
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.role = 'alert';
+            alert.innerHTML = `
+                <div>${message}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            container.appendChild(alert);
+            
+            if (timeout) {
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, timeout);
+            }
+        }
+
+        // View Application Details
+        async function viewApplication(applicationId) {
+            try {
+                const response = await fetch(`/api/get_application/${applicationId}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                
+                const application = await response.json();
+                showApplicationModal(application);
+            } catch (error) {
+                console.error('Error viewing application:', error);
+                showAlert(`Failed to load application details: ${error.message}`, 'danger');
+            }
+        }
+
+        // Show Application Modal
+        function showApplicationModal(application) {
+            const modalContent = document.getElementById('applicationDetailsContent');
+            if (!modalContent) return;
+
+            const aiEvaluation = application.ai_evaluation || {};
+            const hasPhoto = application.passportPhotoUrl;
+            
+            modalContent.innerHTML = `
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="d-flex align-items-center">
+                            ${hasPhoto ? 
+                                `<img src="${application.passportPhotoUrl}" class="applicant-photo me-3" alt="Passport">` : 
+                                '<div class="applicant-photo bg-light d-flex align-items-center justify-content-center me-3">' +
+                                '<i class="fas fa-user text-muted fa-2x"></i></div>'
+                            }
+                            <div>
+                                <h4 class="mb-1">${application.fullname || 'N/A'}</h4>
+                                <p class="text-muted mb-0">Application ID: ${application.application_id || 'N/A'}</p>
+                                <p class="text-muted mb-0">Submitted: ${application.submission_date || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="badge ${getStatusClass(application.status)} fs-6 px-3 py-2">
+                            ${application.status || 'Under Review'}
+                        </span>
+                        ${aiEvaluation.eligibilityScore ? `
+                            <div class="mt-2">
+                                <span class="ai-badge">AI Score: ${aiEvaluation.eligibilityScore}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Personal Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td width="40%"><strong>Email:</strong></td>
+                                        <td>${application.email || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Phone:</strong></td>
+                                        <td>${application.phone || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date of Birth:</strong></td>
+                                        <td>${application.dob || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Address:</strong></td>
+                                        <td>${application.address || 'N/A'}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Academic Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td width="40%"><strong>Program:</strong></td>
+                                        <td>${application.program || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Course:</strong></td>
+                                        <td>${application.course || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>JAMB Score:</strong></td>
+                                        <td>${application.jamb || 'N/A'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CGPA:</strong></td>
+                                        <td>${application.cgpa || 'N/A'}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                ${aiEvaluation.aiModelUsed ? `
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">AI Evaluation Details</h6>
+                                <span class="ai-badge">${aiEvaluation.aiModelUsed}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h3 class="ai-score mb-1">${aiEvaluation.eligibilityScore || 'N/A'}</h3>
+                                                <small class="text-muted">Eligibility Score</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5 class="mb-1">${aiEvaluation.aiConfidence || 'N/A'}</h5>
+                                                <small class="text-muted">Confidence</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5 class="mb-1">${aiEvaluation.processingTime || 'N/A'}</h5>
+                                                <small class="text-muted">Processing Time</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5 class="mb-1">${aiEvaluation.fairnessMetric || 'N/A'}</h5>
+                                                <small class="text-muted">Fairness Metric</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${aiEvaluation.reason ? `
+                                <div class="mt-3">
+                                    <strong>Evaluation Reason:</strong>
+                                    <p class="text-muted mt-1">${aiEvaluation.reason}</p>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            currentEditingId = application.application_id;
+            const modal = new bootstrap.Modal(document.getElementById('applicationDetailsModal'));
+            modal.show();
+        }
+
+        // Generate Admission Letter
+        async function generateAdmissionLetter(applicationId) {
+            try {
+                const response = await fetch('/api/generate_admission_letter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ application_id: applicationId })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                showAlert('Admission letter generated successfully', 'success');
+                // In a real implementation, you would open the letter in a new window or download it
+            } catch (error) {
+                console.error('Error generating admission letter:', error);
+                showAlert(`Failed to generate admission letter: ${error.message}`, 'danger');
+            }
+        }
+
+        // Search applications
+        function searchApplications() {
+            const query = document.getElementById('applicationSearch').value.toLowerCase();
+            if (!query) {
+                renderApplications();
+                return;
+            }
+
+            const filteredApps = applications.filter(app => 
+                (app.fullname && app.fullname.toLowerCase().includes(query)) || 
+                (app.email && app.email.toLowerCase().includes(query)) ||
+                (app.application_id && app.application_id.toLowerCase().includes(query)) ||
+                (app.course && app.course.toLowerCase().includes(query))
+            );
+
+            renderApplicationsTable('applications-table', filteredApps);
+        }
+
+        // Filter applications by status
+        function filterApplications(status) {
+            if (status === 'all') {
+                renderApplicationsTable('applications-table', applications);
+            } else {
+                const filteredApps = applications.filter(app => app.status === status);
+                renderApplicationsTable('applications-table', filteredApps);
+            }
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(`${sectionId}-section`);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar ul li').forEach(li => {
+                li.classList.remove('active');
+            });
+            event.target.parentElement.classList.add('active');
+            
+            // Load section-specific data
+            if (sectionId === 'applications') {
+                loadApplications();
+            }
+            
+            if (sectionId === 'ai-models' || sectionId === 'settings') {
+                loadAISettings();
+                checkSystemStatus();
+            }
+            
+            if (sectionId === 'settings') {
+                loadSystemLogs();
+            }
+
+            if (sectionId === 'reports') {
+                loadReportsData();
+            }
+        }
+
+        // Reports & Analytics Functions
+        async function loadReportsData() {
+            try {
+                // Load enrollment data
+                const enrollmentResponse = await fetch('/api/reports/enrollment_data');
+                const enrollmentData = await enrollmentResponse.json();
+                
+                // Load finance data
+                const financeResponse = await fetch('/api/reports/finance_data');
+                const financeData = await financeResponse.json();
+                
+                // Load AI performance data
+                const aiResponse = await fetch('/api/reports/ai_performance');
+                const aiData = await aiResponse.json();
+                
+                // Load report statistics
+                const statsResponse = await fetch('/api/reports/statistics');
+                const statsData = await statsResponse.json();
+                
+                // Update UI with real data
+                updateReportsUI(enrollmentData, financeData, aiData, statsData);
+                
+            } catch (error) {
+                console.error('Error loading reports data:', error);
+                showAlert('Failed to load reports data', 'error');
+            }
+        }
+
+        function updateReportsUI(enrollmentData, financeData, aiData, statsData) {
+            // Update metrics cards
+            document.getElementById('admission-rate').textContent = `${aiData.admission_rate}%`;
+            document.getElementById('ai-accuracy-rate').textContent = `${aiData.accuracy}%`;
+            document.getElementById('completion-rate').textContent = `${aiData.completion_rate}%`;
+            
+            // Update report statistics
+            document.getElementById('total-reports').textContent = statsData.total_reports;
+            document.getElementById('reports-this-month').textContent = statsData.reports_this_month;
+            document.getElementById('ai-reports').textContent = statsData.ai_reports;
+            document.getElementById('scheduled-reports').textContent = statsData.scheduled_reports;
+            
+            // Update charts
+            updateEnrollmentChart(enrollmentData);
+            updateFinanceChart(financeData);
+        }
+
+        function updateEnrollmentChart(data) {
+            const ctx = document.getElementById('enrollmentChart');
+            if (!ctx) return;
+            
+            if (enrollmentChart) {
+                enrollmentChart.destroy();
+            }
+            
+            enrollmentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.programs.labels,
+                    datasets: [{
+                        label: 'Applications',
+                        data: data.programs.data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Enrollment by Program'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateFinanceChart(data) {
+            const ctx = document.getElementById('financeChart');
+            if (!ctx) return;
+            
+            if (financeChart) {
+                financeChart.destroy();
+            }
+            
+            financeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.months,
+                    datasets: [
+                        {
+                            label: 'Tuition Revenue',
+                            data: data.tuition_revenue,
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        },
+                        {
+                            label: 'Other Fees',
+                            data: data.other_fees,
+                            borderColor: 'rgb(153, 102, 255)',
+                            backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        },
+                        {
+                            label: 'Expenses',
+                            data: data.expenses,
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            tension: 0.1,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Revenue Trends'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Report Generation Functions
+        async function generateEnrollmentReport() {
+            await generateReport('admissions', 'Enrollment Report');
+        }
+
+        async function generateFinanceReport() {
+            await generateReport('finance', 'Financial Report');
+        }
+
+        async function generateStudentList() {
+            await generateReport('students', 'Student List');
+        }
+
+        async function generatePaymentReport() {
+            await generateReport('finance', 'Payment Report');
+        }
+
+        async function generateCourseReport() {
+            await generateReport('admissions', 'Course Report');
+        }
+
+        async function generateAdmissionReport() {
+            await generateReport('admissions', 'Admission Report');
+        }
+
+        async function generateAdmissionRateReport() {
+            await generateReport('admissions', 'Admission Rate Analysis');
+        }
+
+        async function generateAIReport() {
+            await generateReport('ai_performance', 'AI Performance Report');
+        }
+
+        async function generateCompletionReport() {
+            await generateReport('academic', 'Completion Rate Report');
+        }
+
+        async function generateCustomReport() {
+            const reportType = document.getElementById('customReportType').value;
+            const dateRange = document.getElementById('reportDateRange').value;
+            
+            const reportName = `Custom ${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report`;
+            await generateReport(reportType, reportName, dateRange);
+        }
+
+        async function generateReport(type, name, params = null) {
+            try {
+                showAlert(`Generating ${name}...`, 'info');
+                
+                const response = await fetch('/api/reports/generate_report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        name: name,
+                        params: params
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    
+                    // Simulate download
+                    simulateDownload(result.filename);
+                    
+                    // Refresh statistics
+                    loadReportsData();
+                } else {
+                    showAlert(result.error || 'Failed to generate report', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error generating report:', error);
+                showAlert('Failed to generate report', 'error');
+            }
+        }
+
+        function simulateDownload(filename) {
+            // In a real implementation, this would trigger actual file download
+            console.log(`Downloading: ${filename}`);
+            
+            // Show download success message
+            setTimeout(() => {
+                showAlert(`Report ${filename} downloaded successfully`, 'success');
+            }, 1000);
+        }
+
+        function viewEnrollmentDetails() {
+            showAlert('Opening enrollment details...', 'info');
+            // In real implementation, this would open a detailed modal or new page
+            setTimeout(() => {
+                showAlert('Enrollment details loaded', 'success');
+            }, 500);
+        }
+
+        function viewFinanceDetails() {
+            showAlert('Opening financial details...', 'info');
+            // In real implementation, this would open a detailed modal or new page
+            setTimeout(() => {
+                showAlert('Financial details loaded', 'success');
+            }, 500);
+        }
+
+        // Placeholder functions
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/logout')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = '/';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Logout error:', error);
+                        window.location.href = '/';
+                    });
+            }
+        }
+
+        function showProfileModal() {
+            alert('Profile modal would open here');
+        }
+
+        function showSettingsModal() {
+            alert('Settings modal would open here');
+        }
+
+        function editApplication() {
+            alert('Edit application functionality');
+        }
+
+        function generateAdmissionLetterFromModal() {
+            if (currentEditingId) {
+                generateAdmissionLetter(currentEditingId);
+                const modal = bootstrap.Modal.getInstance(document.getElementById('applicationDetailsModal'));
+                modal.hide();
+            }
+        }
+
+        function saveGeneralSettings() {
+            showAlert('General settings saved (placeholder)', 'info');
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+    </script>
+</body>
+</html>

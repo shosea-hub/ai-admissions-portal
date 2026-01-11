@@ -1,0 +1,151 @@
+﻿Program,JAMB,CGPA,Age,Score,Eligible
+UTME,197,0,16,49%,0
+UTME,280,0,19,70%,1
+UTME,254,0,18,64%,1
+UTME,192,0,26,48%,0
+UTME,184,0,25,46%,0
+UTME,400,0,25,100%,1
+UTME,143,0,22,36%,0
+UTME,264,0,27,66%,1
+UTME,238,0,21,60%,1
+UTME,220,0,17,55%,0
+UTME,318,0,26,80%,1
+UTME,307,0,19,77%,1
+UTME,245,0,20,61%,1
+UTME,153,0,23,38%,0
+UTME,273,0,22,68%,1
+UTME,225,0,18,56%,0
+UTME,175,0,19,44%,0
+UTME,197,0,29,49%,0
+UTME,247,0,24,62%,1
+UTME,306,0,17,77%,1
+UTME,259,0,18,65%,1
+UTME,398,0,24,99%,1
+UTME,375,0,24,94%,1
+UTME,203,0,30,51%,0
+UTME,184,0,29,46%,0
+UTME,163,0,19,41%,0
+UTME,267,0,16,67%,1
+UTME,231,0,21,58%,0
+UTME,329,0,20,82%,1
+UTME,260,0,22,65%,1
+UTME,266,0,18,67%,1
+UTME,305,0,28,76%,1
+UTME,148,0,23,37%,0
+UTME,320,0,20,80%,1
+UTME,211,0,18,53%,0
+UTME,318,0,19,80%,1
+UTME,284,0,20,71%,1
+UTME,171,0,17,43%,0
+UTME,375,0,24,94%,1
+UTME,203,0,30,51%,0
+UTME,163,0,20,41%,0
+UTME,250,0,23,63%,1
+UTME,297,0,18,74%,1
+UTME,189,0,26,47%,0
+UTME,226,0,22,57%,0
+UTME,197,0,19,49%,0
+UTME,249,0,21,62%,1
+UTME,293,0,20,73%,1
+UTME,216,0,17,54%,0
+UTME,188,0,19,47%,0
+Direct Entry,0,4.46,30,89%,1
+Direct Entry,0,2.82,34,56%,0
+Direct Entry,0,4.29,31,86%,1
+Direct Entry,0,3.71,35,74%,1
+Direct Entry,0,2.02,37,40%,0
+Direct Entry,0,0.83,23,17%,0
+Direct Entry,0,1.37,19,27%,0
+Direct Entry,0,0.84,24,17%,0
+Direct Entry,0,3.96,33,79%,1
+Direct Entry,0,1.17,41,23%,0
+Direct Entry,0,1.55,21,31%,0
+Direct Entry,0,4.73,44,95%,1
+Direct Entry,0,1.08,28,22%,0
+Direct Entry,0,0.89,22,18%,0
+Direct Entry,0,3.88,45,78%,1
+Direct Entry,0,3.21,26,64%,1
+Direct Entry,0,3,34,60%,1
+Direct Entry,0,3.42,40,68%,1
+Direct Entry,0,1.6,32,32%,0
+Direct Entry,0,0.8,29,16%,0
+Direct Entry,0,1.74,25,35%,0
+Direct Entry,0,4.22,41,84%,1
+Direct Entry,0,2.55,36,51%,0
+Direct Entry,0,3.97,27,79%,1
+Direct Entry,0,2.35,20,47%,0
+Direct Entry,0,4.46,42,89%,1
+Direct Entry,0,2.37,38,47%,0
+Direct Entry,0,1.96,21,39%,0
+Direct Entry,0,3.12,30,62%,1
+Direct Entry,0,1.68,24,34%,0
+Direct Entry,0,3.11,35,62%,1
+Direct Entry,0,4.6,43,92%,1
+Direct Entry,0,1.03,28,21%,0
+Direct Entry,0,0.96,22,19%,0
+Direct Entry,0,4.46,39,89%,1
+Direct Entry,0,4.88,31,98%,1
+Direct Entry,0,0.77,29,15%,0
+Direct Entry,0,3.07,26,61%,1
+Direct Entry,0,4.26,33,85%,1
+Direct Entry,0,0.96,20,19%,0
+Direct Entry,0,2.38,37,48%,0
+Direct Entry,0,4.3,44,86%,1
+Direct Entry,0,3.67,25,73%,1
+Direct Entry,0,3.4,28,68%,1
+Direct Entry,0,1.18,42,24%,0
+Direct Entry,0,2.33,23,47%,0
+Direct Entry,0,1.65,36,33%,0
+Direct Entry,0,3.86,38,77%,1
+Direct Entry,0,2.46,19,49%,0
+Postgraduate,0,3.83,31,77%,1
+Postgraduate,0,2.51,40,50%,0
+Postgraduate,0,4.59,26,92%,1
+Postgraduate,0,2.31,33,46%,0
+Postgraduate,0,4.65,58,93%,1
+Postgraduate,0,4.52,54,90%,1
+Postgraduate,0,1.27,36,25%,0
+Postgraduate,0,2.9,39,58%,0
+Postgraduate,0,3.95,29,79%,1
+Postgraduate,0,4.18,27,84%,1
+Postgraduate,0,3.05,45,61%,1
+Postgraduate,0,4,49,80%,1
+Postgraduate,0,4.27,37,85%,1
+Postgraduate,0,1.38,46,28%,0
+Postgraduate,0,4.44,42,89%,1
+Postgraduate,0,4.8,34,96%,1
+Postgraduate,0,3.24,52,65%,1
+Postgraduate,0,2.61,48,52%,0
+Postgraduate,0,3.11,28,62%,1
+Postgraduate,0,1.48,38,30%,0
+Postgraduate,0,2.17,35,43%,0
+Postgraduate,0,1.13,41,23%,0
+Postgraduate,0,3.64,29,73%,1
+Postgraduate,0,2.88,44,58%,0
+Postgraduate,0,3.62,55,72%,1
+Postgraduate,0,2.35,47,47%,0
+Postgraduate,0,1.84,46,37%,0
+Postgraduate,0,4.2,33,84%,1
+Postgraduate,0,2.52,50,50%,0
+Postgraduate,0,3.94,36,79%,1
+Postgraduate,0,4.29,27,86%,1
+Postgraduate,0,4.82,60,96%,1
+Postgraduate,0,3.56,32,71%,1
+Postgraduate,0,2.66,43,53%,0
+Postgraduate,0,3.43,38,69%,1
+Postgraduate,0,4.86,28,97%,1
+Postgraduate,0,1.94,46,39%,0
+Postgraduate,0,3.12,37,62%,1
+Postgraduate,0,3.31,35,66%,1
+Postgraduate,0,3.94,54,79%,1
+Postgraduate,0,2.25,29,45%,0
+Postgraduate,0,3.41,51,68%,1
+Postgraduate,0,3.15,59,63%,1
+Postgraduate,0,2.08,28,42%,0
+Postgraduate,0,3.43,38,69%,1
+Postgraduate,0,4.86,28,97%,1
+Postgraduate,0,1.94,46,39%,0
+Postgraduate,0,3.12,37,62%,1
+Postgraduate,0,3.31,35,66%,1
+Postgraduate,0,3.94,54,79%,1
+Postgraduate,0,2.25,29,45%,0

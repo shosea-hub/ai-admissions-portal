@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AUST | AI Admin Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      border: 2px solid #004080;
+    }
+    .ai-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      margin-left: 10px;
+    }
+    h2 {
+      color: #004080;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    label, input {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    input {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #004080 0%, #0066cc 100%);
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .error {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .security-features {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      font-size: 0.8em;
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .back-link a {
+      color: #004080;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>AI Admin Portal <span class="ai-badge">Secure</span></h2>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">AI-Powered Admission System</p>
+    
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Enter admin username">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter admin password">
+
+    <button onclick="handleLogin()">Access AI Dashboard</button>
+    <p class="error" id="error"></p>
+
+    <div class="back-link">
+      <a href="/"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+
+    <div class="security-features">
+      <strong>Security Features:</strong><br>
+      • AES-256 Encryption<br>
+      • Two-Factor Authentication<br>
+      • Audit Logging<br>
+      • Role-Based Access Control
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const error = document.getElementById('error');
+
+      if (!username || !password) {
+        error.textContent = 'Please enter both username and password';
+        error.style.color = 'red';
+        return;
+      }
+
+      // Enhanced security check with API call
+      error.textContent = 'Authenticating with AI system...';
+      error.style.color = 'blue';
+      
+      try {
+        const response = await fetch('/api/admin-login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          error.textContent = 'Authentication successful! Redirecting...';
+          error.style.color = 'green';
+          
+          setTimeout(() => {
+            window.location.href = '/admin-dashboard';
+          }, 1000);
+        } else {
+          error.textContent = data.message || 'Invalid login credentials';
+          error.style.color = 'red';
+        }
+      } catch (error) {
+        error.textContent = 'Network error. Please try again.';
+        error.style.color = 'red';
+      }
+    }
+
+    // Enter key support
+    document.getElementById('password').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    });
+
+    // Auto-focus on username field
+    document.getElementById('username').focus();
+  </script>
+</body>
+</html>

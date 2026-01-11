@@ -1,0 +1,5 @@
+{
+  "selected_model": "Random Forest",
+  "ai_prompt": "Evaluate eligibility based on jamb, cgpa, program.",
+  "acceptance_threshold": 0.75
+}

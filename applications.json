@@ -1,0 +1,275 @@
+[
+  {
+    "id": "AUSTA2512755",
+    "name": "CHUKWUNONSO ANGELO",
+    "email": "connect2angelo@gmail.com",
+    "phone": "08068255574",
+    "dob": "1989-12-25",
+    "program": "Postgraduate",
+    "department": "Computer Science",
+    "level": "500",
+    "jambScore": 0,
+    "cgpa": 3.68,
+    "olevelGrades": [],
+    "status": "Admitted",
+    "date": "2025-11-02",
+    "aiEvaluation": {
+      "model": "Logistic Regression",
+      "score": 89,
+      "confidence": 79,
+      "fairness": 80
+    },
+    "admissionNumber": "ADM253406",
+    "savedAt": "2025-11-02T20:49:42+00:00"
+  },
+  {
+    "id": "AUSTA2510156",
+    "name": "ANNI LOVE",
+    "email": "annilove@gmail.com",
+    "phone": "09162354671",
+    "dob": "1999-12-14",
+    "program": "UTME",
+    "department": "Mechanical Engineering",
+    "level": "100",
+    "jambScore": 170,
+    "cgpa": 0,
+    "olevelGrades": [
+      {
+        "subject": "Mathematics",
+        "grade": "D"
+      },
+      {
+        "subject": "Economics",
+        "grade": "C"
+      },
+      {
+        "subject": "Literature-in-English",
+        "grade": "D"
+      },
+      {
+        "subject": "Commerce",
+        "grade": "E"
+      },
+      {
+        "subject": "Government",
+        "grade": "E"
+      }
+    ],
+    "status": "Rejected",
+    "date": "2025-11-03",
+    "aiEvaluation": {
+      "model": "Decision Tree",
+      "score": 30,
+      "confidence": 26,
+      "fairness": 91
+    },
+    "admissionNumber": null,
+    "passportPhoto": "passport_6908f89930f3f.jpg",
+    "savedAt": "2025-11-03T18:46:49+00:00"
+  },
+  {
+    "id": "AUSTA2591901",
+    "name": "blessing aboi",
+    "email": "baboi@gmail.com",
+    "phone": "09162354671",
+    "dob": "1999-12-14",
+    "program": "UTME",
+    "department": "Computer Science",
+    "level": "100",
+    "jambScore": 180,
+    "cgpa": 0,
+    "olevelGrades": [
+      {
+        "subject": "English Language",
+        "grade": "C"
+      },
+      {
+        "subject": "Biology",
+        "grade": "C"
+      },
+      {
+        "subject": "Chemistry",
+        "grade": "C"
+      },
+      {
+        "subject": "Biology",
+        "grade": "C"
+      },
+      {
+        "subject": "English Language",
+        "grade": "C"
+      }
+    ],
+    "status": "Admitted",
+    "date": "2025-11-03",
+    "aiEvaluation": {
+      "model": "Decision Tree",
+      "score": 85,
+      "confidence": 72,
+      "fairness": 99
+    },
+    "admissionNumber": "ADM252639",
+    "passportPhoto": "passport_6908f9afb01a2.jpg",
+    "savedAt": "2025-11-03T18:51:27+00:00"
+  },
+  {
+    "program": "Postgraduate",
+    "course": "Computer Science",
+    "fullname": "Jane Doe",
+    "email": "janedoe@mail.com",
+    "phone": "080123456789",
+    "dob": "2000-01-25",
+    "jamb": "",
+    "alevel": "",
+    "degree": "B.Sc Computer Science",
+    "cgpa": "4.2",
+    "passportPhoto": "default-user_1762575539.jpg",
+    "uploaded_docs": [
+      "neco_1762575539.jpg"
+    ],
+    "application_id": "7bc1df38d4",
+    "submission_date": "2025-11-08 04:18:59",
+    "status": "Admitted",
+    "ai_evaluation": {
+      "aiModelUsed": "Rule-Based System",
+      "eligibilityScore": 84.0,
+      "aiConfidence": "75%",
+      "processingTime": "0.1s",
+      "fairnessMetric": "90%",
+      "status": "Admitted",
+      "application_id": "7bc1df38d4",
+      "reason": "Fallback evaluation: Score 84.0 vs Threshold 60",
+      "admission_number": "ADM258931"
+    }
+  },
+  {
+    "program": "Postgraduate",
+    "course": "Computer Science",
+    "fullname": "Jane Doe",
+    "email": "janedoe@mail.com",
+    "phone": "080123456789",
+    "dob": "2000-01-25",
+    "jamb": "",
+    "alevel": "",
+    "degree": "B.Sc Computer Science",
+    "cgpa": "4.2",
+    "passportPhoto": "default-user_1762578055.jpg",
+    "uploaded_docs": [
+      "neco_1762578055.jpg"
+    ],
+    "application_id": "90650425da",
+    "submission_date": "2025-11-08 05:00:55",
+    "status": "Admitted",
+    "ai_evaluation": {
+      "aiModelUsed": "Rule-Based System",
+      "eligibilityScore": 84.0,
+      "aiConfidence": "75%",
+      "processingTime": "0.1s",
+      "fairnessMetric": "90%",
+      "status": "Admitted",
+      "application_id": "90650425da",
+      "reason": "Fallback evaluation: Score 84.0 vs Threshold 60",
+      "admission_number": "ADM256556"
+    }
+  },
+  {
+    "program": "UTME",
+    "course": "Computer Science",
+    "fullname": "John Doe",
+    "email": "jdoe@mail.com",
+    "phone": "07012345678",
+    "dob": "2005-01-01",
+    "jamb": "305",
+    "olevelSubject0": "English Language",
+    "olevelGrade0": "A",
+    "olevelSubject1": "Mathematics",
+    "olevelGrade1": "B",
+    "olevelSubject2": "Chemistry",
+    "olevelGrade2": "B",
+    "olevelSubject3": "Physics",
+    "olevelGrade3": "A",
+    "olevelSubject4": "Biology",
+    "olevelGrade4": "B",
+    "alevel": "",
+    "degree": "",
+    "cgpa": "",
+    "passportPhoto": "default-user_1762578210.jpg",
+    "uploaded_docs": [
+      "neco_1762578210.jpg"
+    ],
+    "application_id": "15262bf0a5",
+    "submission_date": "2025-11-08 05:03:30",
+    "status": "Admitted",
+    "ai_evaluation": {
+      "aiModelUsed": "Rule-Based System",
+      "eligibilityScore": 305.0,
+      "aiConfidence": "75%",
+      "processingTime": "0.1s",
+      "fairnessMetric": "90%",
+      "status": "Admitted",
+      "application_id": "15262bf0a5",
+      "reason": "Fallback evaluation: Score 305.0 vs Threshold 200",
+      "admission_number": "ADM256427"
+    }
+  },
+  {
+    "program": "Postgraduate",
+    "course": "Computer Science",
+    "fullname": "Jane Doe",
+    "email": "janedoe@mail.com",
+    "phone": "080123456789",
+    "dob": "2000-01-25",
+    "jamb": "",
+    "alevel": "",
+    "degree": "B.Sc Computer Science",
+    "cgpa": "4.2",
+    "passportPhoto": "default-user_1762583496.jpg",
+    "uploaded_docs": [
+      "neco_1762583496.jpg"
+    ],
+    "application_id": "e986254e46",
+    "submission_date": "2025-11-08 06:31:36",
+    "status": "Admitted",
+    "ai_evaluation": {
+      "aiModelUsed": "Rule-Based System",
+      "eligibilityScore": 84.0,
+      "aiConfidence": "75%",
+      "processingTime": "0.1s",
+      "fairnessMetric": "90%",
+      "status": "Admitted",
+      "application_id": "e986254e46",
+      "reason": "Fallback evaluation: Score 84.0 vs Threshold 60",
+      "admission_number": "ADM252738"
+    }
+  },
+  {
+    "program": "Direct Entry",
+    "course": "Software Engineering",
+    "fullname": "chioma eze",
+    "email": "ce@gmail.com",
+    "phone": "09089786756",
+    "dob": "1993-01-01",
+    "jamb": "",
+    "alevel": "3.5",
+    "degree": "",
+    "cgpa": "",
+    "passportPhoto": "default-user_1762625846.jpg",
+    "uploaded_docs": [
+      "neco_1762625846.jpg"
+    ],
+    "application_id": "fab0e3aa07",
+    "submission_date": "2025-11-08 18:17:26",
+    "status": "Admitted",
+    "ai_evaluation": {
+      "aiModelUsed": "Rule-Based System",
+      "eligibilityScore": 50,
+      "aiConfidence": "75%",
+      "processingTime": "0.1s",
+      "fairnessMetric": "90%",
+      "status": "Admitted",
+      "application_id": "fab0e3aa07",
+      "reason": "Fallback evaluation: Score 50 vs Threshold 50",
+      "admission_number": "ADM252738"
+    }
+  }
+]

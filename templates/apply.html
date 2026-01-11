@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AUST | AI-Powered Admission Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.98);
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .ai-process-indicator {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: none;
+        }
+        .application-slip {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 200px;
+            margin: 30px 0;
+        }
+        .logo {
+            max-height: 60px;
+            margin-bottom: 1rem;
+        }
+        .is-invalid {
+            border-color: #dc3545;
+        }
+        .loading-spinner {
+            display: none;
+            width: 2rem;
+            height: 2rem;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .ai-feature-badge {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            margin-left: 5px;
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .admission-letter-btn {
+            display: none;
+            margin-top: 1rem;
+        }
+        .photo-thumbnail {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <!-- AI Process Header -->
+            <div class="ai-process-indicator text-center mb-4">
+                <h4><i class="fas fa-robot me-2"></i>AI-Powered Admission Processing</h4>
+                <p class="mb-0">Using Machine Learning, NLP, and OCR technologies</p>
+            </div>
+
+            <div class="text-center mb-4">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTkEkTZ14LjCVAuqbqQnIaOg4HPQ10AfyZ8w&s" alt="AUST Logo" class="logo" />
+                <h2>AI Admission Application Form</h2>
+                <p class="text-muted">Chapter 3 Implementation - AI Automation Framework</p>
+            </div>
+
+            <!-- Application Progress -->
+            <div class="progress mb-4" style="height: 10px;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%" id="applicationProgress"></div>
+            </div>
+
+            <!-- OCR Processing Section -->
+            <div id="ocrContainer" class="mb-3" style="display: none;">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-file-alt me-2"></i>AI Document Processing
+                    </div>
+                    <div class="card-body">
+                        <h5>Extracted Document Text <span class="ai-feature-badge">Tesseract OCR</span></h5>
+                        <div id="ocrText" class="p-2 border rounded bg-light" style="white-space: pre-wrap; max-height: 200px; overflow-y: auto;"></div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="confirmOcrText" name="confirmOcrText">
+                            <label class="form-check-label" for="confirmOcrText">
+                                Confirm extracted text is accurate
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="applicationForm" novalidate enctype="multipart/form-data">
+                <!-- Program Selection -->
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-graduation-cap me-2"></i>Program Information
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="program" class="form-label">Select Program:</label>
+                                <select class="form-select" id="program" name="program" onchange="handleProgramChange()" required>
+                                    <option value="">-- Choose Program --</option>
+                                    <option value="UTME">UTME</option>
+                                    <option value="Direct Entry">Direct Entry</option>
+                                    <option value="Postgraduate">Postgraduate</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="course" class="form-label">Select Course:</label>
+                                <select class="form-select" id="course" name="course" required>
+                                    <option value="">-- Choose Course --</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="Software Engineering">Software Engineering</option>
+                                    <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                    <option value="Electrical Engineering">Electrical Engineering</option>
+                                    <option value="Data Science">Data Science</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <i class="fas fa-user me-2"></i>Personal Information
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="fullname" class="form-label">Full Name:</label>
+                                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Your full name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address:</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number:</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dob" class="form-label">Date of Birth:</label>
+                                <input type="date" class="form-control" id="dob" name="dob" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passport" class="form-label">Upload Passport Photograph:</label>
+                            <input type="file" class="form-control" id="passport" name="passportPhoto" accept="image/*" required onchange="previewPassport(event)">
+                            <img id="passportPreview" class="preview-image" alt="passport preview">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Program Specific Sections -->
+                <div id="utme-section" style="display:none">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-file me-2"></i>UTME Requirements
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="jamb" class="form-label">JAMB Score:</label>
+                                <input type="number" class="form-control" id="jamb" name="jamb" min="100" max="400">
+                            </div>
+
+                            <h5 class="mb-3">O'Level Subjects & Grades (Minimum 5 Credits including English & Math):</h5>
+                            <div id="olevel-container" class="mb-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="de-section" style="display:none">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-file me-2"></i>Direct Entry Requirements
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="alevel" class="form-label">A-Level Result (Grades):</label>
+                                <input type="text" class="form-control" id="alevel" name="alevel" placeholder="e.g., AAB">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pg-section" style="display:none">
+                    <div class="card mb-4">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-file me-2"></i>Postgraduate Requirements
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="degree" class="form-label">Last Degree Obtained:</label>
+                                <input type="text" class="form-control" id="degree" name="degree" placeholder="e.g., B.Sc Computer Science">
+                            </div>
+                            <div class="mb-3">
+                                <label for="cgpa" class="form-label">CGPA:</label>
+                                <input type="number" class="form-control" id="cgpa" name="cgpa" step="0.01" min="0" max="5" placeholder="e.g., 4.2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Upload with AI Processing -->
+                <div class="card mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <i class="fas fa-upload me-2"></i>Document Upload <span class="ai-feature-badge">AI Processing</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="docs" class="form-label">Upload Required Documents (PDF/JPG/PNG):</label>
+                            <input type="file" class="form-control" id="docs" name="docs" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="processDocuments()">
+                            <small class="text-muted">Upload certificates, transcripts, etc. AI will automatically extract and verify information</small>
+                            <div id="ocrLoading" class="loading-spinner mt-2"></div>
+                        </div>
+                        
+                        <!-- AI Processing Results -->
+                        <div id="aiAnalysisResults" style="display: none;">
+                            <h6><i class="fas fa-chart-line me-2"></i>AI Analysis Results</h6>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="alert alert-info">
+                                        <strong>Document Quality:</strong> <span id="docQuality">Good</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-success">
+                                        <strong>Extraction Confidence:</strong> <span id="extractionConfidence">95%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span id="submitText"><i class="fas fa-robot me-2"></i>Submit for AI Processing</span>
+                        <div id="submitSpinner" class="loading-spinner" style="display: none;"></div>
+                    </button>
+                </div>
+            </form>
+
+            <!-- AI Processing Results Slip -->
+            <div id="applicationSlip" class="application-slip">
+                <div class="text-center mb-4">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTkEkTZ14LjCVAuqbqQnIaOg4HPQ10AfyZ8w&s" alt="AUST Logo" class="logo" />
+                    <h3 class="mt-3">AI Processing Results</h3>
+                    <p class="text-muted">Chapter 3 AI Automation Framework</p>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Application Number:</strong> <span id="appNumber"></span></p>
+                        <p><strong>Date:</strong> <span id="appDate"></span></p>
+                        <p><strong>AI Model Used:</strong> <span id="aiModelUsed"></span></p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <img id="slipPassport" class="preview-image" alt="passport">
+                    </div>
+                </div>
+                
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Full Name</th>
+                        <td id="slipName"></td>
+                    </tr>
+                    <tr>
+                        <th>Program</th>
+                        <td id="slipProgram"></td>
+                    </tr>
+                    <tr>
+                        <th>Course</th>
+                        <td id="slipCourse"></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td id="slipEmail"></td>
+                    </tr>
+                </table>
+                
+                <!-- AI Evaluation Results -->
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-brain me-2"></i>AI Evaluation Results
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Eligibility Score:</strong> <span id="eligibilityScore"></span></p>
+                                <p><strong>AI Confidence:</strong> <span id="aiConfidence"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Processing Time:</strong> <span id="processingTime"></span></p>
+                                <p><strong>Fairness Metric:</strong> <span id="fairnessMetric"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <p><strong>Application Status:</strong> <span id="slipStatusBadge" class="badge"></span></p>
+                    <p id="slipMessage"></p>
+                    <p id="admissionNumberDisplay" style="display: none;">
+                        <strong>Admission Number:</strong> <span id="admissionNumber"></span>
+                    </p>
+                    
+                    <div class="admission-letter-btn">
+                        <button class="btn btn-success" onclick="generateAdmissionLetter()">
+                            <i class="fas fa-file-pdf me-2"></i>Generate Admission Letter
+                        </button>
+                    </div>
+                    
+                    <div class="mt-5">
+                        <p>Applicant's Signature: <span class="signature-line"></span></p>
+                        <p>AI System Verification: <span class="signature-line"></span></p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4 no-print">
+                    <button class="btn btn-outline-primary me-2" onclick="window.print()">Print Slip</button>
+                    <button class="btn btn-primary" onclick="saveAsPDF()">Save as PDF</button>
+                    <button class="btn btn-success mt-2" onclick="goBackToForm()">Apply Again</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+    <script>
+        let ocrWorker = null;
+        const waecSubjects = ["English Language", "Mathematics", "Biology", "Physics", "Chemistry", "Geography", "Economics",
+                             "Agricultural Science", "Government", "Literature-in-English", "Christian Religious Studies", "Commerce"];
+
+        async function initializeOCR() {
+            try {
+                ocrWorker = await Tesseract.createWorker();
+                await ocrWorker.loadLanguage('eng');
+                await ocrWorker.initialize('eng');
+                console.log('Tesseract OCR initialized successfully');
+            } catch (error) {
+                console.error("Failed to initialize OCR:", error);
+            }
+        }
+
+        window.addEventListener('load', function() {
+            initializeOCR();
+            handleProgramChange();
+            updateProgress(10);
+
+            const form = document.getElementById('applicationForm');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                submitApplication(event).catch(error => {
+                    console.error("Submission error:", error);
+                    alert('AI system encountered an error. Please try again.');
+                });
+            });
+        });
+
+        function updateProgress(percent) {
+            document.getElementById('applicationProgress').style.width = percent + '%';
+        }
+
+        function handleProgramChange() {
+            const prog = document.getElementById('program').value;
+            const utme = document.getElementById('utme-section');
+            const de = document.getElementById('de-section');
+            const pg = document.getElementById('pg-section');
+
+            utme.style.display = prog === 'UTME' ? 'block' : 'none';
+            de.style.display = prog === 'Direct Entry' ? 'block' : 'none';
+            pg.style.display = prog === 'Postgraduate' ? 'block' : 'none';
+
+            document.getElementById('jamb').required = (prog === 'UTME');
+            if (prog === 'UTME') {
+                populateOlevelInputs();
+            } else {
+                const container = document.getElementById('olevel-container');
+                container.innerHTML = '';
+            }
+
+            document.getElementById('alevel').required = (prog === 'Direct Entry');
+            document.getElementById('degree').required = (prog === 'Postgraduate');
+            document.getElementById('cgpa').required = (prog === 'Postgraduate');
+
+            if (prog) updateProgress(25);
+        }
+
+        function populateOlevelInputs() {
+            const container = document.getElementById('olevel-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 5; i++) {
+                const row = document.createElement('div');
+                row.className = 'row mb-2';
+
+                const col1 = document.createElement('div');
+                col1.className = 'col-md-8';
+
+                const subjectSelect = document.createElement('select');
+                subjectSelect.className = 'form-select';
+                subjectSelect.required = true;
+                subjectSelect.id = `olevelSubject${i}`;
+                subjectSelect.name = `olevelSubject${i}`;
+
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = '-- Select Subject --';
+                subjectSelect.appendChild(defaultOption);
+
+                waecSubjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject;
+                    subjectSelect.appendChild(option);
+                });
+
+                col1.appendChild(subjectSelect);
+
+                const col2 = document.createElement('div');
+                col2.className = 'col-md-4';
+
+                const gradeSelect = document.createElement('select');
+                gradeSelect.className = 'form-select';
+                gradeSelect.required = true;
+                gradeSelect.id = `olevelGrade${i}`;
+                gradeSelect.name = `olevelGrade${i}`;
+
+                const gradeDefault = document.createElement('option');
+                gradeDefault.value = '';
+                gradeDefault.textContent = '-- Grade --';
+                gradeSelect.appendChild(gradeDefault);
+
+                ['A', 'B', 'C', 'D', 'E', 'F'].forEach(grade => {
+                    const option = document.createElement('option');
+                    option.value = grade;
+                    option.textContent = grade;
+                    gradeSelect.appendChild(option);
+                });
+
+                col2.appendChild(gradeSelect);
+
+                row.appendChild(col1);
+                row.appendChild(col2);
+                container.appendChild(row);
+            }
+        }
+
+        async function processDocuments() {
+            const files = document.getElementById('docs').files;
+            if (!files || files.length === 0) return;
+
+            const loadingElement = document.getElementById('ocrLoading');
+            const ocrContainer = document.getElementById('ocrContainer');
+            const ocrTextDiv = document.getElementById('ocrText');
+            const aiResults = document.getElementById('aiAnalysisResults');
+
+            loadingElement.style.display = 'block';
+            ocrTextDiv.textContent = "AI is processing your documents...";
+            ocrContainer.style.display = 'block';
+            updateProgress(50);
+
+            let fullText = "";
+
+            try {
+                for (const file of files) {
+                    if (file.type.startsWith("image/") || file.type === "application/pdf") {
+                        try {
+                            if (file.type.startsWith("image/")) {
+                                const { data: { text, confidence } } = await Tesseract.recognize(file);
+                                fullText += `\n---- ${file.name} ----\n${text}\n`;
+
+                                document.getElementById('extractionConfidence').textContent =
+                                    Math.round(confidence * 100) + '%';
+                                document.getElementById('docQuality').textContent =
+                                    (confidence > 0.8) ? 'Excellent' : (confidence > 0.6) ? 'Good' : 'Poor';
+                            }
+                        } catch (err) {
+                            console.error("OCR error:", err);
+                            fullText += `\n---- ${file.name} ----\nError extracting text: ${err.message}\n`;
+                        }
+                    }
+                }
+
+                if (fullText.trim()) {
+                    ocrTextDiv.textContent = fullText;
+                    aiResults.style.display = 'block';
+                    updateProgress(70);
+                } else {
+                    ocrTextDiv.textContent = "No text could be extracted from the documents.";
+                }
+            } catch (error) {
+                console.error("OCR processing failed:", error);
+                ocrTextDiv.textContent = "AI processing failed. Please try again or enter information manually.";
+            } finally {
+                loadingElement.style.display = 'none';
+            }
+        }
+
+        function previewPassport(event) {
+            const input = event.target;
+            const preview = document.getElementById('passportPreview');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function submitApplication(event) {
+            updateProgress(90);
+
+            document.getElementById('submitText').style.display = 'none';
+            document.getElementById('submitSpinner').style.display = 'block';
+            document.querySelector('#applicationForm button[type="submit"]').disabled = true;
+
+            try {
+                const formData = new FormData(document.getElementById('applicationForm'));
+
+                const program = document.getElementById('program').value;
+                if (program === 'UTME') {
+                    for (let i = 0; i < 5; i++) {
+                        const subjectEl = document.getElementById(`olevelSubject${i}`);
+                        const gradeEl = document.getElementById(`olevelGrade${i}`);
+                        if (subjectEl && gradeEl && subjectEl.value && gradeEl.value) {
+                            formData.append(`olevelSubject${i}`, subjectEl.value);
+                            formData.append(`olevelGrade${i}`, gradeEl.value);
+                        }
+                    }
+                }
+
+                const response = await fetch('/api/save_application', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+
+                // Store admission data for letter generation
+                const admissionData = {
+                    application_id: result.application_id,
+                    fullname: result.fullname,
+                    program: result.program,
+                    course: result.course,
+                    email: result.email,
+                    ai_evaluation: result.ai_evaluation
+                };
+                localStorage.setItem('currentAdmissionLetter', JSON.stringify(admissionData));
+
+                showApplicationSlip(result);
+                updateProgress(100);
+
+            } catch (error) {
+                console.error("Error:", error);
+                alert('AI system encountered an error: ' + error.message);
+            } finally {
+                document.getElementById('submitText').style.display = 'block';
+                document.getElementById('submitSpinner').style.display = 'none';
+                document.querySelector('#applicationForm button[type="submit"]').disabled = false;
+            }
+        }
+
+        function showApplicationSlip(result) {
+            const evaluation = result.ai_evaluation;
+            
+            document.getElementById('appNumber').textContent = result.application_id;
+            document.getElementById('appDate').textContent = new Date().toLocaleDateString();
+            document.getElementById('slipName').textContent = result.fullname;
+            document.getElementById('slipProgram').textContent = result.program;
+            document.getElementById('slipCourse').textContent = result.course;
+            document.getElementById('slipEmail').textContent = result.email;
+
+            document.getElementById('aiModelUsed').textContent = evaluation.aiModelUsed;
+            document.getElementById('eligibilityScore').textContent = evaluation.eligibilityScore + '%';
+            document.getElementById('aiConfidence').textContent = evaluation.aiConfidence;
+            document.getElementById('processingTime').textContent = evaluation.processingTime;
+            document.getElementById('fairnessMetric').textContent = evaluation.fairnessMetric;
+
+            const statusBadge = document.getElementById('slipStatusBadge');
+            statusBadge.textContent = evaluation.status;
+            if (evaluation.status === 'Admitted') {
+                statusBadge.className = 'badge bg-success';
+                document.querySelector('.admission-letter-btn').style.display = 'block';
+            } else if (evaluation.status === 'Under Review') {
+                statusBadge.className = 'badge bg-warning';
+                document.querySelector('.admission-letter-btn').style.display = 'none';
+            } else {
+                statusBadge.className = 'badge bg-danger';
+                document.querySelector('.admission-letter-btn').style.display = 'none';
+            }
+
+            document.getElementById('slipMessage').textContent = evaluation.reason;
+
+            if (evaluation.status === 'Admitted') {
+                document.getElementById('admissionNumber').textContent = evaluation.admission_number;
+                document.getElementById('admissionNumberDisplay').style.display = 'block';
+            } else {
+                document.getElementById('admissionNumberDisplay').style.display = 'none';
+            }
+
+            document.getElementById('applicationForm').style.display = 'none';
+            document.getElementById('applicationSlip').style.display = 'block';
+
+            const passportPreview = document.getElementById('passportPreview');
+            const slipPassport = document.getElementById('slipPassport');
+            if (passportPreview && passportPreview.src) {
+                slipPassport.src = passportPreview.src;
+                slipPassport.style.display = 'block';
+            }
+        }
+
+        function saveAsPDF() {
+            const element = document.getElementById('applicationSlip');
+            const opt = {
+                margin: 10,
+                filename: 'AUSTA_AI_Application_Results.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        function generateAdmissionLetter() {
+            const admissionData = JSON.parse(localStorage.getItem('currentAdmissionLetter'));
+            if (admissionData) {
+                window.open('/admission-letter', '_blank');
+            } else {
+                alert('No admission data found. Please submit an application first.');
+            }
+        }
+
+        function goBackToForm() {
+            document.getElementById('applicationSlip').style.display = 'none';
+            document.getElementById('applicationForm').style.display = 'block';
+            document.getElementById('applicationForm').reset();
+            document.getElementById('passportPreview').style.display = 'none';
+            document.getElementById('ocrContainer').style.display = 'none';
+            document.getElementById('aiAnalysisResults').style.display = 'none';
+            updateProgress(0);
+            handleProgramChange();
+        }
+
+        window.addEventListener('beforeunload', async () => {
+            if (ocrWorker) {
+                await ocrWorker.terminate();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - AUST ABUJA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #004080;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .wrapper {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+    
+    .sidebar {
+      background-color: var(--primary-color);
+      color: white;
+      min-height: 100vh;
+      width: 250px;
+      transition: all 0.3s;
+      position: fixed;
+      z-index: 1000;
+    }
+    
+    .sidebar-header {
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    
+    .sidebar-header img {
+      max-height: 50px;
+    }
+    
+    .sidebar ul.components {
+      padding: 20px 0;
+    }
+    
+    .sidebar ul li a {
+      padding: 10px 20px;
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .sidebar ul li a:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar ul li.active a {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: all 0.3s;
+      flex: 1;
+      width: calc(100% - 250px);
+    }
+    
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      height: 100%;
+    }
+    
+    .card:hover {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-body {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .status-badge {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+    }
+    
+    .passport-thumb {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .section {
+      display: none;
+    }
+    
+    .section.active {
+      display: block;
+    }
+    
+    /* Dashboard Cards */
+    .dashboard-card {
+      height: 100%;
+      transition: transform 0.3s;
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .dashboard-card .card-icon {
+      font-size: 2.5rem;
+      opacity: 0.7;
+    }
+    
+    /* Student-specific styles */
+    .student-card {
+      border-left: 4px solid #4e73df;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .sidebar {
+        margin-left: -250px;
+      }
+      .sidebar.active {
+        margin-left: 0;
+      }
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+      }
+      .main-content.active {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="https://via.placeholder.com/150x50?text=AUST+Logo" alt="University Logo">
+        <h5 class="mt-2 text-white">Student Portal</h5>
+      </div>
+      
+      <ul class="list-unstyled components">
+        <li class="active">
+          <a href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('courses')"><i class="fas fa-book me-2"></i> My Courses</a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('grades')"><i class="fas fa-graduation-cap me-2"></i> Grades</a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('finance')"><i class="fas fa-money-bill-wave me-2"></i> Finance</a>
+        </li>
+        <li>
+          <a href="#" onclick="showSection('profile')"><i class="fas fa-user me-2"></i> Profile</a>
+        </li>
+        <li class="mt-4">
+          <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+          <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <div class="ms-auto">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                <i class="fas fa-user-circle me-1"></i> Student User
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#" onclick="showSection('profile')"><i class="fas fa-user me-2"></i> Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showSection('settings')"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <div class="container-fluid">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="section active">
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <h3 class="mb-4">Student Dashboard</h3>
+            </div>
+          </div>
+          
+          <!-- Quick Stats Row -->
+          <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card student-card dashboard-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h5 class="card-title">Current Courses</h5>
+                      <p class="card-text">View your current semester courses</p>
+                    </div>
+                    <i class="fas fa-book card-icon text-primary"></i>
+                  </div>
+                  <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showSection('courses')">View Courses</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card student-card dashboard-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h5 class="card-title">Academic Record</h5>
+                      <p class="card-text">Grades and transcripts</p>
+                    </div>
+                    <i class="fas fa-file-alt card-icon text-warning"></i>
+                  </div>
+                  <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showSection('grades')">View Records</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card student-card dashboard-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h5 class="card-title">Fee Status</h5>
+                      <p class="card-text">Payment history and balances</p>
+                    </div>
+                    <i class="fas fa-money-bill-alt card-icon text-success"></i>
+                  </div>
+                  <a href="#" class="btn btn-primary btn-sm mt-3" onclick="showSection('finance')">View Payments</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card student-card dashboard-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <h5 class="card-title">Attendance</h5>
+                      <p class="card-text">View your class attendance</p>
+                    </div>
+                    <i class="fas fa-user-check card-icon text-info"></i>
+                  </div>
+                  <a href="#" class="btn btn-primary btn-sm mt-3">View Attendance</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Announcements -->
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Announcements</h5>
+                </div>
+                <div class="card-body">
+                  <div class="alert alert-info">
+                    <h6><i class="fas fa-info-circle me-2"></i> Registration Deadline</h6>
+                    <p>The deadline for course registration is February 15, 2024. Please complete your registration before this date.</p>
+                  </div>
+                  <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i> Midterm Exams</h6>
+                    <p>Midterm examinations will begin on March 10, 2024. Check your timetable for details.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Upcoming Events -->
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-title mb-0">Upcoming Events</h5>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>Date</th>
+                          <th>Event</th>
+                          <th>Location</th>
+                          <th>Time</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>2024-02-10</td>
+                          <td>Orientation for New Students</td>
+                          <td>Main Auditorium</td>
+                          <td>10:00 AM</td>
+                        </tr>
+                        <tr>
+                          <td>2024-02-15</td>
+                          <td>Registration Deadline</td>
+                          <td>Online</td>
+                          <td>11:59 PM</td>
+                        </tr>
+                        <tr>
+                          <td>2024-03-10</td>
+                          <td>Midterm Examinations Begin</td>
+                          <td>Various</td>
+                          <td>9:00 AM</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Courses Section -->
+        <div id="courses-section" class="section">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">My Courses - 2023/2024 Second Semester</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Course Code</th>
+                      <th>Course Title</th>
+                      <th>Lecturer</th>
+                      <th>Schedule</th>
+                      <th>Venue</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>CSC301</td>
+                      <td>Advanced Computer Science</td>
+                      <td>Prof. John Smith</td>
+                      <td>Mon/Wed 10:00-11:30</td>
+                      <td>Science Block A12</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Materials</button>
+                        <button class="btn btn-sm btn-info ms-1">Timetable</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>CSC302</td>
+                      <td>Computer Science Applications</td>
+                      <td>Dr. Jane Doe</td>
+                      <td>Tue/Thu 2:00-3:30</td>
+                      <td>Science Block B05</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Materials</button>
+                        <button class="btn btn-sm btn-info ms-1">Timetable</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>MTH301</td>
+                      <td>Advanced Mathematics</td>
+                      <td>Prof. Robert Johnson</td>
+                      <td>Mon/Fri 1:00-2:30</td>
+                      <td>Science Block A08</td>
+                      <td>
+                        <button class="btn btn-sm btn-primary">Materials</button>
+                        <button class="btn btn-sm btn-info ms-1">Timetable</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Grades Section -->
+        <div id="grades-section" class="section">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Academic Record</h5>
+              <button class="btn btn-primary" onclick="downloadTranscript()">
+                <i class="fas fa-download me-1"></i> Download Transcript
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">CGPA</h5>
+                      <h1 class="display-4">3.75</h1>
+                      <p class="text-muted">Out of 5.0</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Current Level</h5>
+                      <h1 class="display-4">300</h1>
+                      <p class="text-muted">Level</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card">
+                    <div class="card-body text-center">
+                      <h5 class="card-title">Credits Earned</h5>
+                      <h1 class="display-4">72</h1>
+                      <p class="text-muted">Out of 120 required</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <h5 class="mb-3">Current Semester Grades</h5>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Course Code</th>
+                      <th>Course Title</th>
+                      <th>Credit Units</th>
+                      <th>Grade</th>
+                      <th>Grade Point</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>CSC301</td>
+                      <td>Advanced Computer Science</td>
+                      <td>4</td>
+                      <td>A</td>
+                      <td>5.0</td>
+                    </tr>
+                    <tr>
+                      <td>CSC302</td>
+                      <td>Computer Science Applications</td>
+                      <td>4</td>
+                      <td>B+</td>
+                      <td>4.5</td>
+                    </tr>
+                    <tr>
+                      <td>MTH301</td>
+                      <td>Advanced Mathematics</td>
+                      <td>3</td>
+                      <td>A-</td>
+                      <td>4.7</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Finance Section -->
+        <div id="finance-section" class="section">
+          <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">Financial Records</h5>
+              <button class="btn btn-success" onclick="printFeeStatement()">
+                <i class="fas fa-print me-1"></i> Print Statement
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Fee Summary</h5>
+                      <table class="table table-sm">
+                        <tr>
+                          <td>Tuition Fee:</td>
+                          <td class="text-end">₦150,000.00</td>
+                        </tr>
+                        <tr>
+                          <td>Accommodation:</td>
+                          <td class="text-end">₦50,000.00</td>
+                        </tr>
+                        <tr>
+                          <td>Other Charges:</td>
+                          <td class="text-end">₦10,000.00</td>
+                        </tr>
+                        <tr class="table-active">
+                          <td><strong>Total Fees:</strong></td>
+                          <td class="text-end"><strong>₦210,000.00</strong></td>
+                        </tr>
+                        <tr class="table-success">
+                          <td><strong>Total Paid:</strong></td>
+                          <td class="text-end"><strong>₦150,000.00</strong></td>
+                        </tr>
+                        <tr class="table-warning">
+                          <td><strong>Balance:</strong></td>
+                          <td class="text-end"><strong>₦60,000.00</strong></td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Payment History</h5>
+                      <div class="table-responsive">
+                        <table class="table table-sm">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Description</th>
+                              <th class="text-end">Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>2024-01-15</td>
+                              <td>Tuition Fee (Installment)</td>
+                              <td class="text-end">₦100,000.00</td>
+                            </tr>
+                            <tr>
+                              <td>2024-02-01</td>
+                              <td>Accommodation Fee</td>
+                              <td class="text-end">₦50,000.00</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> 
+                The remaining balance of ₦60,000.00 is due by March 1, 2024. Late payments may incur penalties.
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Profile Section -->
+        <div id="profile-section" class="section">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Student Profile</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 text-center">
+                  <img src="https://via.placeholder.com/150" class="img-thumbnail mb-3" alt="Student Photo">
+                  <h5>John Doe</h5>
+                  <p class="text-muted">CSC23001</p>
+                  <button class="btn btn-sm btn-outline-primary mt-2">Upload Photo</button>
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><strong>Faculty:</strong> Faculty of Science</p>
+                      <p><strong>Department:</strong> Computer Science</p>
+                      <p><strong>Program:</strong> B.Sc Computer Science</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><strong>Level:</strong> 300 Level</p>
+                      <p><strong>Gender:</strong> Male</p>
+                      <p><strong>Date of Birth:</strong> 2000-05-15</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><strong>Email:</strong> john.doe@student.aust.edu.ng</p>
+                      <p><strong>Phone:</strong> 08012345678</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><strong>Address:</strong> 123 Sample Street, Abuja</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><strong>JAMB Score:</strong> 250</p>
+                      <p><strong>Admission Date:</strong> 2023-09-01</p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><strong>Status:</strong> <span class="badge bg-success">Active</span></p>
+                    </div>
+                  </div>
+                  <hr>
+                  <button class="btn btn-primary" onclick="editProfile()">
+                    <i class="fas fa-edit me-1"></i> Edit Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Settings Section -->
+        <div id="settings-section" class="section">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Account Settings</h5>
+            </div>
+            <div class="card-body">
+              <form id="settingsForm">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" value="john.doe@student.aust.edu.ng">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" value="08012345678">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-12">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">New Password</label>
+                    <input type="password" class="form-control">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Confirm New Password</label>
+                    <input type="password" class="form-control">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                      <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Profile</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="profileForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">First Name</label>
+                  <input type="text" class="form-control" value="John">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" class="form-control" value="Doe">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Gender</label>
+                  <select class="form-select">
+                    <option value="Male" selected>Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Date of Birth</label>
+                  <input type="date" class="form-control" value="2000-05-15">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" value="john.doe@student.aust.edu.ng">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" class="form-control" value="08012345678">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <label class="form-label">Address</label>
+                  <textarea class="form-control" rows="2">123 Sample Street, Abuja</textarea>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Initialize the dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up sidebar toggle
+      document.getElementById('sidebarCollapse').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('active');
+        document.getElementById('main-content').classList.toggle('active');
+      });
+      
+      // Set up logout buttons
+      document.getElementById('sidebarLogout').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'student-login.html';
+      });
+      
+      document.getElementById('dropdownLogout').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = 'student-login.html';
+      });
+    });
+    
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(`${sectionId}-section`).classList.add('active');
+      
+      // Update menu active state
+      document.querySelectorAll('.sidebar ul li').forEach(li => {
+        li.classList.remove('active');
+      });
+      event.target.parentElement.classList.add('active');
+    }
+    
+    function downloadTranscript() {
+      alert('Transcript download would be initiated here');
+    }
+    
+    function printFeeStatement() {
+      alert('Fee statement would be printed here');
+    }
+    
+    function editProfile() {
+      const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+      modal.show();
+    }
+    
+    function saveSettings() {
+      alert('Settings saved successfully!');
+    }
+
+    // Placeholder functions
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            fetch('/api/logout')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/';
+                    }
+                })
+                .catch(error => {
+                    console.error('Logout error:', error);
+                    window.location.href = '/';
+                });
+        }
+    }
+  </script>
+</body>
+</html>

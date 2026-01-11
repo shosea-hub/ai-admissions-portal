@@ -1,0 +1,101 @@
+2025-12-07 00:20:36,335 INFO app Model Loaded: AI model loaded successfully with 6 features
+2025-12-07 00:20:36,390 INFO app System Startup: Enhanced AI Admission System started successfully
+2025-12-07 00:20:40,089 INFO app Model Loaded: AI model loaded successfully with 6 features
+2025-12-07 00:20:40,141 INFO app System Startup: Enhanced AI Admission System started successfully
+2025-12-07 00:20:50,693 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 00:35:07,572 INFO app Report Generated: Generated admissions report: admissions_report_20251206_233507.pdf
+2025-12-07 00:35:37,019 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 00:35:50,636 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 00:36:20,643 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 00:36:50,631 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 00:59:25,547 INFO app Report Generated: Generated admissions report: admissions_report_20251206_235925.pdf
+2025-12-07 00:59:39,989 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 01:00:20,624 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 01:00:26,921 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 01:00:34,778 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 01:11:50,059 ERROR app Training Failed: [Errno 13] Permission denied: 'training_data.csv'
+2025-12-07 01:12:56,605 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 03:00:23,349 INFO app Admin Login: Admin admin logged in successfully
+2025-12-07 03:00:24,653 INFO app Applications Retrieved: 8 applications loaded.
+2025-12-07 03:02:02,533 ERROR app Training Failed: [Errno 13] Permission denied: 'training_data.csv'
+2025-12-07 03:02:09,581 ERROR app Training Failed: [Errno 13] Permission denied: 'training_data.csv'
+2025-12-07 03:02:25,656 ERROR app Training Failed: [Errno 13] Permission denied: 'training_data.csv'
+2025-12-07 03:02:32,645 ERROR app Training Failed: [Errno 13] Permission denied: 'training_data.csv'
+2026-01-03 18:09:11,688 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-03 18:09:11,715 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-03 18:09:14,015 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-03 18:09:14,042 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-03 18:44:45,076 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:45:25,865 WARNING app Admin Login Failed: Failed login attempt for username: qqqqqqqq
+2026-01-03 18:47:06,537 WARNING app Admin Login Failed: Failed login attempt for username: admin123
+2026-01-03 18:47:12,587 INFO app Admin Login: Admin admin logged in successfully
+2026-01-03 18:47:14,775 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:47:29,601 INFO app Logout: Admin logged out successfully
+2026-01-03 18:47:54,004 INFO app Admin Login: Admin admin logged in successfully
+2026-01-03 18:47:55,394 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:48:25,708 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:48:56,223 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:49:26,533 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:49:56,208 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:50:26,541 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:50:56,213 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:51:26,521 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:51:32,405 INFO app Student Login: Student 7bc1df38d4 logged in
+2026-01-03 18:52:17,238 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:53:17,527 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:54:17,220 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:55:17,535 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:56:17,219 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:57:17,222 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:58:17,530 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 18:59:17,228 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:00:17,532 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:01:17,217 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:02:17,533 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:03:17,213 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:04:17,535 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:05:17,224 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:05:39,029 INFO app Logout: Admin logged out successfully
+2026-01-03 19:06:17,220 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:07:17,523 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:08:00,782 INFO app Student Login: Student 1111111111111 logged in
+2026-01-03 19:08:13,546 INFO app Logout: Student logged out successfully
+2026-01-03 19:08:17,224 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:09:17,529 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:14:18,295 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-03 19:15:11,440 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-06 16:08:11,315 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-06 16:08:11,346 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-06 16:08:14,249 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-06 16:08:14,289 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-06 16:08:31,596 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-06 16:08:33,919 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-06 16:08:56,414 INFO app Student Login: Student ssssssssss logged in
+2026-01-06 16:11:14,215 INFO app Logout: Student logged out successfully
+2026-01-06 16:19:47,796 INFO app Student Login: Student wwwwwwwwwww logged in
+2026-01-06 16:19:55,295 INFO app Logout: Student logged out successfully
+2026-01-07 15:53:00,343 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-07 15:53:00,512 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-07 15:53:05,622 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-07 15:53:05,676 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-07 15:55:35,078 INFO app Student Login: Student admin logged in
+2026-01-07 15:55:54,116 INFO app Logout: Student logged out successfully
+2026-01-07 15:56:26,843 INFO app Admin Login: Admin admin logged in successfully
+2026-01-07 15:56:28,853 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-07 15:56:39,142 INFO app Logout: Admin logged out successfully
+2026-01-07 16:18:09,158 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-07 16:18:09,220 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-07 16:18:13,634 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-07 16:18:13,681 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-07 16:19:57,350 INFO app Student Login: Student admin logged in
+2026-01-07 16:20:20,239 INFO app Logout: Student logged out successfully
+2026-01-11 19:01:13,161 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-11 19:01:13,228 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-11 19:01:18,322 INFO app Model Loaded: AI model loaded successfully with 6 features
+2026-01-11 19:01:18,372 INFO app System Startup: Enhanced AI Admission System started successfully
+2026-01-11 19:03:52,804 INFO app Admin Login: Admin admin logged in successfully
+2026-01-11 19:03:55,002 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-11 19:04:23,445 INFO app Applications Retrieved: 8 applications loaded.
+2026-01-11 19:05:07,266 INFO app Logout: Admin logged out successfully
+2026-01-11 19:05:16,384 INFO app Student Login: Student admin logged in
+2026-01-11 19:06:18,369 INFO app Logout: Student logged out successfully

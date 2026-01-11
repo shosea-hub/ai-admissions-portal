@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUST | Admission Letter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .letter-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        
+        .letter-header {
+            text-align: center;
+            border-bottom: 2px solid #004080;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            max-height: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        .university-name {
+            color: #004080;
+            font-weight: bold;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .university-motto {
+            color: #666;
+            font-style: italic;
+            margin: 0;
+        }
+        
+        .letter-body {
+            line-height: 1.6;
+        }
+        
+        .letter-footer {
+            margin-top: 3rem;
+            border-top: 1px solid #ddd;
+            padding-top: 2rem;
+        }
+        
+        .signature-area {
+            margin-top: 3rem;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 300px;
+            margin: 10px 0;
+        }
+        
+        .stamp-area {
+            text-align: right;
+            margin-top: 2rem;
+        }
+        
+        .stamp {
+            border: 2px solid #004080;
+            padding: 10px;
+            display: inline-block;
+            text-align: center;
+            font-weight: bold;
+            color: #004080;
+        }
+        
+        .action-buttons {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .applicant-info-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .applicant-details {
+            flex: 1;
+            padding-right: 30px;
+        }
+        
+        .applicant-photo-container {
+            text-align: center;
+            flex-shrink: 0;
+            width: 150px;
+        }
+        
+        .passport-photo {
+            width: 120px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px solid #004080;
+            border-radius: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        .photo-label {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .applicant-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #004080;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+        
+        .applicant-contact {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .contact-item {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-item i {
+            width: 20px;
+            color: #004080;
+            margin-right: 8px;
+        }
+        
+        .ai-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .admission-details {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #004080;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .error-container {
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            
+            .letter-container {
+                box-shadow: none;
+                border: none;
+                margin: 0;
+                padding: 20mm;
+                width: 100%;
+                min-height: 100vh;
+            }
+            
+            .action-buttons {
+                display: none;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .letter-container {
+                width: 100%;
+                padding: 10mm;
+            }
+            
+            .applicant-info-section {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            
+            .applicant-details {
+                padding-right: 0;
+                margin-top: 20px;
+            }
+            
+            .applicant-photo-container {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading State -->
+    <div id="loadingState" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3">Generating your admission letter...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error-container" style="display: none;">
+        <div class="alert alert-danger">
+            <h4><i class="fas fa-exclamation-triangle me-2"></i>No Admission Data Found</h4>
+            <p id="errorMessage">Please submit an application first or contact the admissions office.</p>
+            <div class="mt-3">
+                <a href="/apply" class="btn btn-primary me-2">
+                    <i class="fas fa-edit me-2"></i>Go to Application Form
+                </a>
+                <a href="/" class="btn btn-outline-secondary">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Letter Content -->
+    <div id="letterContent" style="display: none;">
+        <div class="letter-container fade-in">
+            <div class="letter-header">
+                <img src="https://www.rsif-paset.org/wp-content/uploads/2020/10/11-abuja.jpg" alt="AUST Logo" class="logo">
+                <h1 class="university-name">AFRICAN UNIVERSITY OF SCIENCE AND TECHNOLOGY</h1>
+                <p class="university-motto">Excellence in Science and Technology Education</p>
+                <p>KM 10 Umaru Musa Yar'Adua Road, Galadimawa, Abuja, Nigeria | www.aust.edu.ng</p>
+                <div class="ai-badge">
+                    <i class="fas fa-robot me-1"></i> AI-Powered Admission System
+                </div>
+            </div>
+
+            <div class="letter-body">
+                <div class="applicant-info-section">
+                    <div class="applicant-details">
+                        <div class="applicant-name" id="applicantName">Jane Doe</div>
+                        <div class="applicant-contact">
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span id="applicantEmail">janedoe@mail.com</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span id="applicantPhone">080123456789</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="applicantAddress">123 University Avenue, Abuja, Nigeria</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="applicant-photo-container">
+                        <img id="applicantPhoto" src="https://placehold.co/120x150/004080/FFFFFF?text=Jane+Doe" alt="Applicant Photo" class="passport-photo">
+                        <div class="photo-label">Applicant Photo</div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Date:</strong> <span id="letterDate"></span></p>
+                        <p><strong>Admission Number:</strong> <span id="admissionNumber"></span></p>
+                        <p><strong>Application Number:</strong> <span id="applicationNumber"></span></p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p><strong>Student ID:</strong> <span id="studentId"></span></p>
+                        <p><strong>Academic Session:</strong> <span id="academicSession"></span></p>
+                    </div>
+                </div>
+
+                <p class="mt-4">Dear <span id="dearName">Jane</span>,</p>
+
+                <h4 class="text-center text-primary my-4">OFFER OF PROVISIONAL ADMISSION</h4>
+
+                <p>We are pleased to inform you that the African University of Science and Technology (AUST), Abuja has offered you provisional admission into the following program:</p>
+
+                <div class="admission-details">
+                    <p class="mb-1"><strong>Program:</strong> <span id="programName">Computer Science</span></p>
+                    <p class="mb-1"><strong>Course:</strong> <span id="courseName">B.Sc. Computer Science</span></p>
+                    <p class="mb-1"><strong>Faculty:</strong> <span id="facultyName">Faculty of Computing and Information Technology</span></p>
+                    <p class="mb-1"><strong>Duration:</strong> <span id="programDuration">4</span> Years</p>
+                    <p class="mb-0"><strong>Admission Type:</strong> <span id="admissionType">Undergraduate</span></p>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <h6><i class="fas fa-robot me-2"></i>AI Admission Evaluation</h6>
+                    <p class="mb-0">This admission is based on our AI-powered evaluation system which assessed your academic qualifications and program suitability using advanced machine learning algorithms.</p>
+                </div>
+
+                <h5 class="mt-4">Conditions of Admission:</h5>
+                <ol>
+                    <li>This admission is provisional pending the verification of your original academic certificates and credentials</li>
+                    <li>You are required to accept this offer by paying the acceptance fee within <strong>30 days</strong> from the date of this letter</li>
+                    <li>Registration for courses must be completed within the stipulated registration period</li>
+                    <li>You must meet all the academic and conduct requirements of the university throughout your program</li>
+                    <li>Maintain a minimum CGPA of 1.50 throughout your academic program</li>
+                </ol>
+
+                <h5 class="mt-4">Required Documents for Registration:</h5>
+                <ul>
+                    <li>Original copies of all academic certificates/statements of result</li>
+                    <li>Birth certificate or sworn declaration of age</li>
+                    <li>Certificate of Local Government of Origin</li>
+                    <li>Medical certificate of fitness from a recognized hospital</li>
+                    <li>Four recent passport photographs</li>
+                    <li>JAMB admission letter (for UTME candidates)</li>
+                    <li>Direct Entry form (for Direct Entry candidates)</li>
+                </ul>
+
+                <h5 class="mt-4">Important Dates:</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Acceptance Deadline:</strong> <span id="acceptanceDeadline"></span></p>
+                        <p><strong>Registration Period:</strong> <span id="registrationPeriod"></span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Orientation:</strong> <span id="orientationDate"></span></p>
+                        <p><strong>Lecture Commencement:</strong> <span id="lectureStartDate"></span></p>
+                    </div>
+                </div>
+
+                <p class="mt-4">We congratulate you on this achievement and look forward to welcoming you to the AUST community, where we nurture future leaders in science and technology.</p>
+
+                <p>Yours sincerely,</p>
+
+                <div class="signature-area">
+                    <div class="signature-line"></div>
+                    <p><strong>Prof. John O. Adeyemi</strong><br>
+                    Dean of Admissions<br>
+                    African University of Science and Technology, Abuja</p>
+                </div>
+
+                <div class="stamp-area">
+                    <div class="stamp">
+                        OFFICIAL STAMP<br>
+                        AUST ADMISSIONS<br>
+                        <small>ABUJA</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="letter-footer text-center">
+                <p><strong>African University of Science and Technology, Abuja</strong><br>
+                KM 10 Umaru Musa Yar'Adua Road, Galadimawa, Abuja, Nigeria<br>
+                Tel: +234-907-343-073 | Email: admissions@aust.edu.ng | Website: www.aust.edu.ng</p>
+            </div>
+        </div>
+
+        <div class="action-buttons no-print">
+            <button class="btn btn-primary me-2" onclick="window.print()">
+                <i class="fas fa-print me-2"></i>Print Letter
+            </button>
+            <button class="btn btn-success me-2" onclick="saveAsPDF()">
+                <i class="fas fa-file-pdf me-2"></i>Save as PDF
+            </button>
+            <button class="btn btn-info me-2" onclick="shareLetter()">
+                <i class="fas fa-share-alt me-2"></i>Share
+            </button>
+            <a href="/student-dashboard" class="btn btn-outline-primary me-2">
+                <i class="fas fa-tachometer-alt me-2"></i>Student Dashboard
+            </a>
+            <a href="/" class="btn btn-outline-secondary">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdmissionLetter();
+        });
+
+        async function loadAdmissionLetter() {
+            const loadingState = document.getElementById('loadingState');
+            const errorState = document.getElementById('errorState');
+            const errorMessage = document.getElementById('errorMessage');
+            const letterContent = document.getElementById('letterContent');
+
+            try {
+                // For demonstration, we'll use sample data
+                const sampleData = {
+                    full_name: "Jane Doe",
+                    email: "janedoe@mail.com",
+                    phone: "080123456789",
+                    address: "123 University Avenue, Abuja, Nigeria",
+                    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    admission_number: `ADM/${new Date().getFullYear()}/00123`,
+                    application_id: 'APP202400567',
+                    student_id: `AUST${new Date().getFullYear()}1234`,
+                    academic_session: `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`,
+                    program: "Computer Science",
+                    course: "B.Sc. Computer Science",
+                    faculty: "Faculty of Computing and Information Technology",
+                    program_duration: "4",
+                    admission_type: "Undergraduate",
+                    acceptance_deadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    registration_period: `${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`,
+                    orientation_date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    lecture_start_date: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+                    photo_url: "https://placehold.co/120x150/004080/FFFFFF?text=Jane+Doe"
+                };
+                
+                // In a real application, you would fetch from localStorage or API
+                const admissionData = JSON.parse(localStorage.getItem('currentAdmissionLetter')) || sampleData;
+                
+                if (!admissionData) {
+                    throw new Error('No admission data found. Please submit an application first.');
+                }
+
+                // Try to fetch additional data from server if needed
+                if (admissionData.application_id && admissionData.application_id !== 'APP202400567') {
+                    try {
+                        const response = await fetch(`/api/get_admission_data`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                application_id: admissionData.application_id
+                            })
+                        });
+
+                        if (response.ok) {
+                            const serverData = await response.json();
+                            Object.assign(admissionData, serverData);
+                        }
+                    } catch (serverError) {
+                        console.warn('Could not fetch additional data from server:', serverError);
+                    }
+                }
+
+                populateAdmissionLetter(admissionData);
+                
+                loadingState.style.display = 'none';
+                letterContent.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading admission letter:', error);
+                loadingState.style.display = 'none';
+                errorMessage.textContent = error.message;
+                errorState.style.display = 'block';
+            }
+        }
+
+        function populateAdmissionLetter(data) {
+            document.getElementById('letterDate').textContent = data.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('admissionNumber').textContent = data.admission_number || `ADM/${new Date().getFullYear()}/${data.application_id || 'N/A'}`;
+            document.getElementById('applicationNumber').textContent = data.application_id || 'N/A';
+            document.getElementById('studentId').textContent = data.student_id || `AUST${new Date().getFullYear()}${Math.floor(Math.random() * 1000)}`;
+            document.getElementById('academicSession').textContent = data.academic_session || `${new Date().getFullYear()}/${new Date().getFullYear() + 1}`;
+            document.getElementById('applicantName').textContent = data.full_name || data.student_name || 'Applicant';
+            document.getElementById('applicantEmail').textContent = data.email || 'Not provided';
+            document.getElementById('applicantPhone').textContent = data.phone || 'Not provided';
+            document.getElementById('applicantAddress').textContent = data.address || 'Not provided';
+            document.getElementById('dearName').textContent = (data.full_name || data.student_name || 'Applicant').split(' ')[0];
+            document.getElementById('programName').textContent = data.program || 'N/A';
+            document.getElementById('courseName').textContent = data.course || 'N/A';
+            document.getElementById('facultyName').textContent = data.faculty || 'Faculty of Science and Technology';
+            document.getElementById('programDuration').textContent = data.program_duration || '4';
+            document.getElementById('admissionType').textContent = data.admission_type || data.program || 'Regular';
+            document.getElementById('acceptanceDeadline').textContent = data.acceptance_deadline || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('registrationPeriod').textContent = data.registration_period || `${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - ${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+            document.getElementById('orientationDate').textContent = data.orientation_date || new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('lectureStartDate').textContent = data.lecture_start_date || new Date(Date.now() + 21 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            // Set the photo
+            const photoElement = document.getElementById('applicantPhoto');
+            if (data.photo_url || data.passport_photo) {
+                photoElement.src = data.photo_url || data.passport_photo;
+            } else if (data.passportPhoto) {
+                photoElement.src = `/uploads/${data.passportPhoto}`;
+            } else {
+                photoElement.src = 'https://placehold.co/120x150/004080/FFFFFF?text=Passport+Photo';
+            }
+        }
+
+        function saveAsPDF() {
+            const element = document.querySelector('.letter-container');
+            const opt = {
+                margin: 10,
+                filename: `AUST_Admission_Letter_${document.getElementById('studentId').textContent}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                }
+            };
+
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating PDF...';
+            event.target.disabled = true;
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                event.target.innerHTML = originalText;
+                event.target.disabled = false;
+            });
+        }
+
+        function shareLetter() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AUST Abuja Admission Letter',
+                    text: `My admission letter from African University of Science and Technology, Abuja`,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Link copied to clipboard!');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

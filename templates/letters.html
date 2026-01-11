@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Admission Status | AUST Abuja</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 2px solid #004080;
+    }
+    .logo {
+      width: 80px;
+      margin: 0 auto 1rem;
+      display: block;
+    }
+    h1 {
+      color: #004080;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-weight: 700;
+    }
+    .form-control {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .form-control:focus {
+      border-color: #004080;
+      box-shadow: 0 0 0 0.25rem rgba(0, 64, 128, 0.25);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #004080, #0066cc);
+      border: none;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0066cc, #004080);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    #letter-content {
+      margin-top: 2rem;
+      text-align: left;
+      background-color: #f8f9fa;
+      padding: 2rem;
+      border-radius: 10px;
+      display: none;
+      border-left: 4px solid #004080;
+    }
+    .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #004080;
+    }
+    .letter-body {
+      margin: 1.5rem 0;
+      line-height: 1.6;
+    }
+    .letter-footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #dee2e6;
+      text-align: right;
+    }
+    .info-message {
+      background-color: #e7f3ff;
+      border-left: 4px solid #004080;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    .error-message {
+      background-color: #ffe7e7;
+      border-left: 4px solid #dc3545;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    .success-message {
+      background-color: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 15px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    .status-admitted {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .status-rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+    /* Enhanced Print Styles */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #letter-content, #letter-content * {
+        visibility: visible;
+      }
+      #letter-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background-color: white;
+        padding: 20px;
+        box-shadow: none;
+        margin: 0;
+        border: none;
+      }
+      .no-print, .btn, input, h1, .container > *:not(#letter-content) {
+        display: none !important;
+      }
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .back-link a {
+      color: #004080;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Container -->
+  <div class="container">
+    <img src="https://www.rsif-paset.org/wp-content/uploads/2020/10/11-abuja.jpg" alt="AUST Logo" class="logo">
+    <h1>Check Admission Status</h1>
+    
+    <div class="mb-4">
+      <label for="studentIdentifier" class="form-label fw-semibold">Enter your Application ID, Email, or Matric Number</label>
+      <input type="text" class="form-control" id="studentIdentifier" 
+             placeholder="e.g., APP2024001, student@example.com, or CSC23001" required>
+    </div>
+    
+    <div class="d-grid gap-2">
+      <button class="btn btn-primary btn-lg" onclick="checkAdmission()" id="checkBtn">
+        <i class="fas fa-search me-2"></i>Check Status
+      </button>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" id="loadingSpinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted">Checking admission status...</p>
+    </div>
+
+    <!-- Results Container -->
+    <div id="letter-content">
+      <!-- Content will be dynamically inserted here -->
+    </div>
+
+    <div class="back-link">
+      <a href="/"><i class="fas fa-arrow-left me-1"></i> Back to Homepage</a>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Main function to check admission status
+    async function checkAdmission() {
+      const identifier = document.getElementById('studentIdentifier').value.trim();
+      const letterDiv = document.getElementById('letter-content');
+      const checkBtn = document.getElementById('checkBtn');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      
+      // Clear previous results
+      letterDiv.innerHTML = '';
+      letterDiv.style.display = 'none';
+      
+      if (!identifier) {
+        showMessage("Please enter your Application ID, email, or matric number", "error");
+        return;
+      }
+
+      // Show loading state
+      checkBtn.disabled = true;
+      loadingSpinner.style.display = 'block';
+      
+      try {
+        // Fetch applications from the server
+        const response = await fetch('/api/get_applications');
+        const applications = await response.json();
+        
+        // Find matching application
+        const application = applications.find(app => 
+          app.application_id?.toLowerCase() === identifier.toLowerCase() ||
+          app.email?.toLowerCase() === identifier.toLowerCase() ||
+          app.matricNumber?.toLowerCase() === identifier.toLowerCase()
+        );
+        
+        if (!application) {
+          showMessage("No admission record found for this identifier. Please check your entry and try again.", "error");
+          return;
+        }
+
+        // Process application status
+        displayAdmissionStatus(application);
+        
+      } catch (error) {
+        console.error('Error checking admission status:', error);
+        showMessage("An error occurred while checking your admission status. Please try again later.", "error");
+      } finally {
+        checkBtn.disabled = false;
+        loadingSpinner.style.display = 'none';
+      }
+    }
+
+    function displayAdmissionStatus(application) {
+      const letterDiv = document.getElementById('letter-content');
+      const fullName = application.fullname || `${application.firstName || ''} ${application.lastName || ''}`.trim();
+      const program = application.program || 'Undergraduate Program';
+      const email = application.email || 'Not provided';
+      const applicationId = application.application_id || 'Not assigned';
+      
+      // Determine status based on application data
+      let status = application.status || 'pending';
+      let statusText = 'Under Review';
+      let statusClass = 'status-pending';
+      
+      if (status.toLowerCase() === 'admitted' || status.toLowerCase() === 'active') {
+        statusText = 'Admitted';
+        statusClass = 'status-admitted';
+      } else if (status.toLowerCase() === 'rejected') {
+        statusText = 'Not Admitted';
+        statusClass = 'status-rejected';
+      }
+
+      if (statusText === 'Admitted') {
+        // Generate admission letter
+        letterDiv.innerHTML = `
+          <div class="letter-header">
+            <img src="https://www.rsif-paset.org/wp-content/uploads/2020/10/11-abuja.jpg" alt="AUST Logo" style="height: 60px;">
+            <div class="text-end">
+              <p class="mb-1"><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+              <p class="mb-0"><strong>Ref:</strong> AUST/ADM/${new Date().getFullYear()}/${applicationId}</p>
+            </div>
+          </div>
+          
+          <div class="letter-body">
+            <h2 class="text-center text-primary mb-4">OFFER OF PROVISIONAL ADMISSION</h2>
+            
+            <p class="mb-3">Dear <strong>${fullName}</strong>,</p>
+            
+            <p class="mb-3">We are pleased to inform you that you have been offered provisional admission to study at the <strong>African University of Science and Technology (AUST), Abuja</strong> for the degree program leading to the award of:</p>
+            
+            <div class="alert alert-primary text-center mb-4">
+              <h4 class="mb-1">BACHELOR OF SCIENCE (B.Sc.) IN</h4>
+              <h3 class="text-primary mb-0">${program}</h3>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <p><strong>Application ID:</strong> ${applicationId}</p>
+                <p><strong>Email:</strong> ${email}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Admission Status:</strong> <span class="status-badge ${statusClass}">${statusText}</span></p>
+                <p><strong>Academic Session:</strong> 2024/2025</p>
+              </div>
+            </div>
+            
+            <p class="mb-3">This offer is subject to the following conditions:</p>
+            <ul class="mb-4">
+              <li>Presentation of original copies of your academic credentials</li>
+              <li>Medical fitness certificate from a recognized hospital</li>
+              <li>Payment of prescribed fees on or before the registration deadline</li>
+              <li>Maintenance of good conduct throughout your stay in the University</li>
+            </ul>
+            
+            <div class="alert alert-warning mb-4">
+              <h5 class="alert-heading">Important Information:</h5>
+              <p class="mb-1"><strong>Registration Deadline:</strong> February 28, 2025</p>
+              <p class="mb-1"><strong>Orientation Program:</strong> March 15, 2025</p>
+              <p class="mb-0"><strong>Commencement of Lectures:</strong> March 18, 2025</p>
+            </div>
+            
+            <p>To accept this offer, please complete the online acceptance form available on the student portal and proceed with the registration process.</p>
+            
+            <p>We congratulate you on this achievement and look forward to welcoming you to the AUST community, where we nurture future leaders in science and technology.</p>
+          </div>
+          
+          <div class="letter-footer">
+            <p class="mb-1">Yours faithfully,</p>
+            <p class="mb-1"><strong>Prof. John O. Adeyemi</strong></p>
+            <p class="mb-0">Registrar</p>
+            <p class="mb-0">African University of Science and Technology, Abuja</p>
+          </div>
+          
+          <div class="no-print text-center mt-4">
+            <button class="btn btn-primary me-2" onclick="window.print()">
+              <i class="fas fa-print me-2"></i>Print Admission Letter
+            </button>
+            <button class="btn btn-success" onclick="downloadAdmissionLetter()">
+              <i class="fas fa-download me-2"></i>Download PDF
+            </button>
+          </div>
+        `;
+      } else if (statusText === 'Under Review') {
+        // Show pending status
+        letterDiv.innerHTML = `
+          <div class="info-message">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-clock fa-2x text-warning me-3"></i>
+              <div>
+                <h3 class="mb-1">Application Under Review</h3>
+                <p class="mb-0">Status: <span class="status-badge ${statusClass}">${statusText}</span></p>
+              </div>
+            </div>
+            
+            <p class="mb-2">Dear <strong>${fullName}</strong>,</p>
+            <p class="mb-3">Your application for admission into the <strong>${program}</strong> program is currently under review by our admissions committee.</p>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Application ID:</strong> ${applicationId}</p>
+                <p><strong>Email:</strong> ${email}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Program:</strong> ${program}</p>
+                <p><strong>Expected Decision:</strong> Within 2-3 weeks</p>
+              </div>
+            </div>
+            
+            <p class="mt-3 mb-0">We will notify you via email as soon as a decision has been made. Please check back later for updates.</p>
+          </div>
+        `;
+      } else {
+        // Show rejection notice
+        letterDiv.innerHTML = `
+          <div class="error-message">
+            <div class="d-flex align-items-center mb-3">
+              <i class="fas fa-times-circle fa-2x text-danger me-3"></i>
+              <div>
+                <h3 class="mb-1">Admission Decision</h3>
+                <p class="mb-0">Status: <span class="status-badge ${statusClass}">${statusText}</span></p>
+              </div>
+            </div>
+            
+            <p class="mb-2">Dear <strong>${fullName}</strong>,</p>
+            <p class="mb-3">We regret to inform you that your application for admission into the <strong>${program}</strong> program has not been successful at this time.</p>
+            
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <p><strong>Application ID:</strong> ${applicationId}</p>
+                <p><strong>Email:</strong> ${email}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Program Applied:</strong> ${program}</p>
+              </div>
+            </div>
+            
+            <p class="mb-0">We appreciate your interest in our institution and encourage you to consider reapplying in the next academic session. For any inquiries, please contact the admissions office.</p>
+          </div>
+        `;
+      }
+      
+      letterDiv.style.display = 'block';
+    }
+
+    function showMessage(message, type) {
+      const letterDiv = document.getElementById('letter-content');
+      const className = type === 'error' ? 'error-message' : type === 'success' ? 'success-message' : 'info-message';
+      const icon = type === 'error' ? 'fa-exclamation-triangle' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle';
+      
+      letterDiv.innerHTML = `
+        <div class="${className}">
+          <div class="d-flex align-items-center">
+            <i class="fas ${icon} fa-2x me-3"></i>
+            <div>${message}</div>
+          </div>
+        </div>
+      `;
+      letterDiv.style.display = 'block';
+    }
+
+    function downloadAdmissionLetter() {
+      // In a real implementation, this would generate a PDF
+      alert('PDF download functionality would be implemented here. This would generate a proper PDF version of your admission letter.');
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Auto-fill if identifier is provided in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const studentId = urlParams.get('id');
+      if (studentId) {
+        document.getElementById('studentIdentifier').value = studentId;
+        setTimeout(() => checkAdmission(), 500);
+      }
+      
+      // Auto-focus on input field
+      document.getElementById('studentIdentifier').focus();
+    });
+
+    // Allow Enter key to trigger checkAdmission
+    document.getElementById('studentIdentifier').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkAdmission();
+      }
+    });
+  </script>
+</body>
+</html>
